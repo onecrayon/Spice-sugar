@@ -225,6 +225,7 @@
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
 				PRODUCT_NAME = JSCocoaLoader;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = "i386 ppc ppc7400 ppc970";
 				WRAPPER_EXTENSION = sugar;
 			};
 			name = Release;
