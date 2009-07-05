@@ -25,11 +25,11 @@
 	NSString *bundlePath;
 }
 
-@property (readonly) NSString* script;
-@property (readonly) NSArray* arguments;
-@property (readonly) NSString* syntaxContext;
-@property (readonly) NSString* bundlePath;
-@property (readonly) NSString* undoName;
+@property (readonly,copy) NSString* script;
+@property (readonly,retain) NSArray* arguments;
+@property (readonly,copy) NSString* syntaxContext;
+@property (readonly,copy) NSString* bundlePath;
+@property (readonly,copy) NSString* undoName;
 
 @property (copy) NSString* target;
 @property (retain) NSArray* paths;

@@ -14,7 +14,16 @@
 #import <MRRangeSet.h>
 #import <EspressoSyntaxCore.h>
 
+// This allows us to set private setters for these variables
+@interface JSCocoaLoader ()
+@property (readwrite,copy) NSString* script;
+@property (readwrite,retain) NSArray* arguments;
+@property (readwrite,copy) NSString* syntaxContext;
+@property (readwrite,copy) NSString* bundlePath;
+@property (readwrite,copy) NSString* undoName;
+@end
 
+// The actual implementation of the class
 @implementation JSCocoaLoader
 
 @synthesize script;
@@ -31,21 +40,21 @@
 		return nil;
 	
 	// Grab the basic instance variables
-	self->script = [dictionary objectForKey:@"script"];
-	self->undoName = [dictionary objectForKey:@"undo_name"];
-	self->arguments = [dictionary objectForKey:@"arguments"];
+	[self setScript:[dictionary objectForKey:@"script"]];
+	[self setUndoName:[dictionary objectForKey:@"undo_name"]];
+	[self setArguments:[dictionary objectForKey:@"arguments"]];
 	
 	if ([self arguments] == nil) {
-		self->arguments = [NSArray arrayWithObjects:nil];
+		[self setArguments:[NSArray arrayWithObjects:nil]];
 	}
 	
 	// Check to see if they specified a target function
 	[self setTarget:[dictionary objectForKey:@"function"]];
 	
 	// Set up the syntax context variable for later checking
-	self->syntaxContext = [dictionary objectForKey:@"syntax-context"];
+	[self setSyntaxContext:[dictionary objectForKey:@"syntax-context"]];
 	// We need to remember the bundle path so we can check for scripts various places
-	self->bundlePath = myBundlePath;
+	[self setBundlePath:myBundlePath];
 	
 	// Setup the search paths
 	// These paths should always be searched
@@ -126,11 +135,7 @@
 		}
 	}
 	
-	// Clean up the JSCocoaController
-	// Is this really necessary now that I have garbage collection turned on?
-	[jsc unlinkAllReferences];
-	[jsc garbageCollect];
-	[jsc release];
+	// TODO: verify that no explicit garbage collection of jsc is necessary
 	
 	// Return control to Espresso
 	return result;
@@ -147,7 +152,7 @@
 	NSString *path = nil;
 	
 	for (NSString* testPath in [self paths]) {
-		if ([manager fileExistsAtPath:testPath]) {
+		if ([manager fileExistsAtPath:[testPath stringByAppendingPathComponent:fileName]]) {
 			path = [testPath stringByAppendingPathComponent:fileName];
 			break;
 		}
