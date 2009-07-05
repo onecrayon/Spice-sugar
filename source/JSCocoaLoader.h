@@ -12,6 +12,7 @@
 @interface JSCocoaLoader : NSObject {
 	// Name of the script to run
 	NSString *script;
+	NSArray *paths;
 	// Arguments to pass to the script (array)
 	NSArray *arguments;
 	// Standard undo_name option
@@ -22,6 +23,7 @@
 	NSString *bundle_path;
 }
 
+- (NSString *)findScript:(NSString *)file;
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
 
 @end

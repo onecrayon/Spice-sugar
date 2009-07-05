@@ -232,7 +232,7 @@
 		1DEB913F08733D840010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_PATH = /Applications/Coding/Espresso.app;
+				APPLICATION_PATH = /Applications/Espresso.app;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUNDLE_LOADER = "$(APPLICATION_PATH)/Contents/MacOS/Espresso";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -249,7 +249,7 @@
 		1DEB914008733D840010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				APPLICATION_PATH = /Applications/Coding/Espresso.app;
+				APPLICATION_PATH = /Applications/Espresso.app;
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				BUNDLE_LOADER = "$(APPLICATION_PATH)/Contents/MacOS/Espresso";
 				GCC_C_LANGUAGE_STANDARD = gnu99;

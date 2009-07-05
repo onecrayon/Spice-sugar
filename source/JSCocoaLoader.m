@@ -17,8 +17,7 @@
 
 @implementation JSCocoaLoader
 
-- (id)initWithDictionary:(NSDictionary *)dictionary bundlePath:(NSString *)bundlePath
-{
+- (id)initWithDictionary:(NSDictionary *)dictionary bundlePath:(NSString *)bundlePath {
 	self = [super init];
 	if (self == nil)
 		return nil;
@@ -28,8 +27,7 @@
 	undo_name = [dictionary objectForKey:@"undo_name"];
 	arguments = [dictionary objectForKey:@"arguments"];
 	
-	if (arguments == nil)
-	{
+	if (arguments == nil) {
 		arguments = [NSArray arrayWithObjects:nil];
 	}
 	
@@ -38,18 +36,34 @@
 	// We need to remember the bundle path so we can check for scripts various places
 	bundle_path = bundlePath;
 	
+	// Setup the search paths and full script name
+	if ([script pathExtension] != @"js") {
+		script = [script stringByAppendingString:@".js"];
+	}
+	// These paths should always be searched
+	NSArray *default_paths = [NSArray arrayWithObjects:
+		[@"~/Library/Application Support/Espresso/TEA/Scripts/" stringByExpandingTildeInPath],
+		[bundle_path stringByAppendingPathComponent:@"Javascripts/"],
+		[bundle_path stringByAppendingPathComponent:@"TEA/"],
+		nil
+	];
+	// This path might need to be searched if we aren't in the JSCocoaLoader bundle
+	NSString *jclPath = [[NSBundle bundleWithIdentifier:@"com.onecrayon.jscocoaloader"] bundlePath];
+	if (jclPath != bundle_path) {
+		paths = [default_paths arrayByAddingObject:[jclPath stringByAppendingPathComponent:@"Javascripts/"]];
+	} else {
+		paths = [NSArray arrayWithArray:default_paths];
+	}
+	
 	return self;
 }
 
-- (BOOL)canPerformActionWithContext:(id)context
-{
-	if (syntax_context != nil)
-	{
+- (BOOL)canPerformActionWithContext:(id)context {
+	if (syntax_context != nil) {
 		NSRange range = [[[context selectedRanges] objectAtIndex:0] rangeValue];
 		SXSelectorGroup *selectors = [SXSelectorGroup selectorGroupWithString:syntax_context];
 		SXZone *zone = [[context syntaxTree] zoneAtCharacterIndex:range.location];
-		if (![selectors matches:zone])
-		{
+		if (![selectors matches:zone]) {
 			return NO;
 		}
 	}
@@ -59,26 +73,15 @@
 
 - (BOOL)performActionWithContext:(id)context error:(NSError **)outError
 {
-	if (script == nil)
-	{
+	if (script == nil) {
 		NSLog(@"JSCocoaLoader Error: Missing script tag in XML");
 		return NO;
 	}
-	// Check for user script overrides
-	if ([script pathExtension] != @"js")
-	{
-		script = [script stringByAppendingString:@".js"];
-	}
-	NSString *path = [[@"~/Library/Application Support/Espresso/TEA/Scripts/" stringByAppendingString:script] stringByExpandingTildeInPath];
-	NSFileManager *manager = [NSFileManager defaultManager];
-	if (![manager fileExistsAtPath:path])
-	{
-		path = [bundle_path stringByAppendingPathComponent:[@"TEA/" stringByAppendingString:script]];
-		if (![manager fileExistsAtPath:path])
-		{
-			// File doesn't exist in the user overrides or the bundle, so something is screwy
-			[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/TEA/Scripts/" inContext:context];
-		}
+	
+	NSString *path = [self findScript:script];
+	if (path == nil) {
+		[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/TEA/Scripts/" inContext:context];
+		return NO;
 	}
 	
 	// Time to initialize JSCocoa
@@ -93,11 +96,9 @@
 	[jsc evalJSFile:path];
 	
 	NSString *target = @"";
-	if ([jsc hasJSFunctionNamed:@"act"])
-	{
+	if ([jsc hasJSFunctionNamed:@"act"]) {
 		target = @"act";
-	} else if ([jsc hasJSFunctionNamed:@"main"])
-	{
+	} else if ([jsc hasJSFunctionNamed:@"main"]) {
 		target = @"main";
 	}
 	
@@ -124,6 +125,21 @@
 	return result;
 }
 
+- (NSString *)findScript:(NSString *)fileName {
+	// Iterate over the array and check if the paths exist
+	NSFileManager *manager = [NSFileManager defaultManager];
+	NSString *path = nil;
+	int arrayCount = [paths count];
+	for (int i = 0; i < arrayCount; i++) {
+		if ([manager fileExistsAtPath:[paths objectAtIndex:i]]) {
+			path = [[paths objectAtIndex:i] stringByAppendingPathComponent:fileName];
+			break;
+		}
+	}
+	
+	return path;
+}
+
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context
 {
 	NSAlert *alert = [NSAlert
@@ -133,8 +149,7 @@
 						  otherButton:nil
 						  informativeTextWithFormat:message
 					  ];
-	if ([context windowForSheet] != nil)
-	{
+	if ([context windowForSheet] != nil) {
 		[alert
 			beginSheetModalForWindow:[context windowForSheet]
 			modalDelegate:nil
