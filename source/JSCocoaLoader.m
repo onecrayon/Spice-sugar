@@ -28,7 +28,10 @@
 	undo_name = [dictionary objectForKey:@"undo_name"];
 	arguments = [dictionary objectForKey:@"arguments"];
 	
-	NSLog([arguments description]);
+	if (arguments == nil)
+	{
+		arguments = [NSArray arrayWithObjects:nil];
+	}
 	
 	// Set up the syntax context variable for later checking
 	syntax_context = [dictionary objectForKey:@"syntax-context"];
@@ -101,7 +104,7 @@
 	// Run the function, if it exists
 	BOOL result;
 	if (target != @"") {
-		JSValueRef returnValue = [jsc callJSFunctionNamed:target withArguments:nil];
+		JSValueRef returnValue = [jsc callJSFunctionNamed:target withArgumentsArray:arguments];
 		if (![jsc unboxJSValueRef:returnValue])
 		{
 			result = NO;
