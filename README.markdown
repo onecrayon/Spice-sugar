@@ -17,13 +17,15 @@ extended using [JSCocoa][jsc]. Benefits of using JSCocoaLoader include:
 Installation
 ============
 
-To install, visit the downloads tab and grab the latest version. If you have
-never installed the JSCocoaLoader, double click the file in the zip and
-relaunch Espresso to install.
+To install, visit the [downloads tab][dl] and grab the latest version.
+If you have never installed the JSCocoaLoader, double click the file in
+the zip and relaunch Espresso to install.
 
 If you have previously installed JSCocoaLoader.sugar, visit
 `~/Library/Application Support/Espresso/Sugars/` and delete the existing
 JSCocoaLoader.sugar file before double clicking the new one to install.
+
+   [dl]: http://github.com/onecrayon/JSCocoaLoader-sugar/downloads
 
 Building the development version
 ================================
@@ -42,7 +44,7 @@ would the download version.
 somewhere other than your root Applications folder.  If you have Espresso
 installed somewhere else:
 
-1. choose Project -> Edit Project Settings in Xcode
+1. Choose Project -> Edit Project Settings in Xcode
 2. Switch to the Build tab
 3. Choose "All configurations" in the Configuration dropdown
 4. Scroll to the very bottom of the window and double click APPLICATION\_PATH
