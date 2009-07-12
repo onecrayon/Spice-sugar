@@ -36,12 +36,14 @@ var Range = new Class({
 			if (!$type(location)) this.location = 0;
 			else this.location = location;
 		}
+		// Sets up a custom entry for $type()
+		this.$family = { name: 'range' };
 	},
 	rangeValue: function() {
 		return NSMakeRange(this.location, this.length);
 	},
 	value: function() {
-		return NSValue.valueWithRange(this.rangeValue);
+		return NSValue.valueWithRange(this.rangeValue());
 	},
 	equals: function(secondRange) {
 		// Checks if the current range is identical to the passed range
@@ -57,6 +59,9 @@ var Range = new Class({
 		// Checks if the current range is contained by the passed range
 		var secondRange = new Range(secondRange);
 		return secondRange.contains(this);
+	},
+	log: function() {
+		console.log('range(' + this.location + ',' + this.length + ')');
 	}
 });
 
@@ -73,67 +78,6 @@ CETextSnippet
 SXSelectorGroup
 */
 
-// ITEMIZER UTILITIES
-// TODO: convert to Mootools class?
-// TODO: integrate this and other direct actions (like those in Selection) into a class for interacting with the TextAction context?
-var Item = new Class({
-	getByRange: function(range) {
-		if (!range.rangeValue)
-			var range = new Range(range);
-		return context.itemizer.smallestItemContainingCharacterRange(range.rangeValue);
-	},
-	getParentByRange: function(range) {
-		if ($type(range) !== 'range')
-			var range = new Range(range);
-		var item = Item.getByRange(range);
-		var newRange = new Range(item.range);
-		
-		// Select the parent if the range is the same
-		while (newRange.equals(range) && item.parent) {
-			item = item.parent;
-			newRange = new Range(item.range);
-		};
-		return item;
-	},
-	fromRange: function(range, getParentIfMatch) {
-		if (getParentIfMatch)
-			return Item.getParentByRange(range);
-		else
-			return Item.getByRange(range);
-	}
-});
-
-// SELECTION UTILITIES
-var Selection = new Class({
-
-	set: function(ranges) {
-		ranges = Array.prototype.map.call(ranges, function(range){
-			if ($type(range) !== 'range')
-				var range = new Range(range);
-			return range.value;
-		});
-		return context.setSelectedRanges(ranges);
-	},
-	get: function() {
-		ranges = context.selectedRanges;
-		return Array.prototype.map.call(ranges, function(range) {
-			return new Range(range);
-		});
-	},
-	expand: function(expandTo) {
-		expandTo = expandTo || 'Item';
-		this['expandTo' + expandTo]();
-	},
-	expandToItem: function() {
-		var newRanges = [];
-		var selectedRanges = Selection.get();
-		selectedRanges.each(function(range) {
-			newRanges.push(Item.fromRange(range, true).range);
-		});
-		return Selection.set(newRanges);
-	}
-});
-
 // SNIPPET UTILITIES
 var Snippet = new Class({
 	initialize: function(text) {
@@ -142,8 +86,11 @@ var Snippet = new Class({
 	snippet: function() {
 		return CETextSnippet.snippetWithString(this.text);
 	},
-	write: function() {
+	write: function(overwrite) {
 		return context.insertTextSnippet(this.snippet());
+	},
+	log: function() {
+		console.log(this.text);
 	}
 });
 
@@ -158,3 +105,63 @@ String.implement({
 		console.log(String(this));
 	}
 });
+
+
+// TEXT ACTION UTILITIES
+var TextActionContext = new Class({
+	// Selection functions
+	setSelections: function(ranges) {
+		ranges = Array.prototype.map.call(ranges, function(range){
+			if ($type(range) !== 'range')
+				var range = new Range(range);
+			return range.value();
+		});
+		context.setSelectedRanges(ranges);
+	},
+	getSelections: function() {
+		ranges = context.selectedRanges;
+		return Array.prototype.map.call(ranges, function(range) {
+			return new Range(range);
+		});
+	},
+	getFirstSelection: function() {
+		return new Range(context.selectedRanges[0]);
+	},
+	expandSelection: function(expandTo) {
+		expandTo = expandTo || 'Item';
+		this['expandSelectionTo' + expandTo]();
+	},
+	expandSelectionToItem: function() {
+		var newRanges = [];
+		var selectedRanges = this.getSelections();
+		selectedRanges.each(function(range) {
+			newRanges.push(this.itemFromRange(range, true).range);
+		}, this);
+		return this.setSelections(newRanges);
+	},
+	// Itemizer functions
+	getItemByRange: function(range) {
+		if ($type(range) !== 'range')
+			var range = new Range(range);
+		return context.itemizer.smallestItemContainingCharacterRange(range.rangeValue());
+	},
+	getItemParentByRange: function(range) {
+		var item = this.getItemByRange(range);
+		var newRange = new Range(item.range);
+		
+		// Select the parent if the range is the same
+		while (newRange.equals(range) && item.parent) {
+			item = item.parent;
+			newRange = new Range(item.range);
+		};
+		return item;
+	},
+	itemFromRange: function(range, getParentIfMatch) {
+		if (getParentIfMatch)
+			return this.getItemParentByRange(range);
+		else
+			return this.getItemByRange(range);
+	}
+});
+
+var textContext = new TextActionContext();
