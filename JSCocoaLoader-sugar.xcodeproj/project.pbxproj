@@ -7,26 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7AB2B4DB1000FC3E00158603 /* import.js in Copy Javascripts */ = {isa = PBXBuildFile; fileRef = 7AB2B4D61000FBB000158603 /* import.js */; };
 		7AB5643E0FFFBA22003DC051 /* JSCocoaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AB5643D0FFFBA22003DC051 /* JSCocoaLoader.m */; };
 		7AB564910FFFD724003DC051 /* JSCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB564900FFFD724003DC051 /* JSCocoa.framework */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		7AB2B4DA1000FC2C00158603 /* Copy Javascripts */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = Javascripts;
-			dstSubfolderSpec = 1;
-			files = (
-				7AB2B4DB1000FC3E00158603 /* import.js in Copy Javascripts */,
-			);
-			name = "Copy Javascripts";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -38,6 +23,7 @@
 		7AB5643C0FFFBA22003DC051 /* JSCocoaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaLoader.h; path = source/JSCocoaLoader.h; sourceTree = "<group>"; };
 		7AB5643D0FFFBA22003DC051 /* JSCocoaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaLoader.m; path = source/JSCocoaLoader.m; sourceTree = "<group>"; };
 		7AB564900FFFD724003DC051 /* JSCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSCocoa.framework; sourceTree = "<group>"; };
+		7AE86144100A352400CEE589 /* mootools-system.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "mootools-system.js"; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* JSCocoaLoader.sugar */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSCocoaLoader.sugar; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -142,6 +128,7 @@
 		7AB2B4D51000FBB000158603 /* Javascripts */ = {
 			isa = PBXGroup;
 			children = (
+				7AE86144100A352400CEE589 /* mootools-system.js */,
 				7AB2B4D61000FBB000158603 /* import.js */,
 			);
 			path = Javascripts;
@@ -150,20 +137,20 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D5B49AC048680CD000E48DA /* JSCocoaLoader */ = {
+		8D5B49AC048680CD000E48DA /* JSCocoaLoader.sugar */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "JSCocoaLoader" */;
+			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "JSCocoaLoader.sugar" */;
 			buildPhases = (
 				8D5B49AF048680CD000E48DA /* Resources */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
-				7AB2B4DA1000FC2C00158603 /* Copy Javascripts */,
+				7AE86131100A31EA00CEE589 /* Compress Javascripts */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = JSCocoaLoader;
+			name = JSCocoaLoader.sugar;
 			productInstallPath = "$(HOME)/Library/Bundles";
 			productName = JSCocoaLoader.sugar;
 			productReference = 8D5B49B6048680CD000E48DA /* JSCocoaLoader.sugar */;
@@ -181,7 +168,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D5B49AC048680CD000E48DA /* JSCocoaLoader */,
+				8D5B49AC048680CD000E48DA /* JSCocoaLoader.sugar */,
 			);
 		};
 /* End PBXProject section */
@@ -196,6 +183,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7AE86131100A31EA00CEE589 /* Compress Javascripts */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			comments = "Compresses all Javascripts bundled with the app and copies them to the built project";
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Compress Javascripts";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "for FILE in $SRCROOT/Contents/Javascripts/*.js\ndo\n\tFILENAME=${FILE##*/}; \n\tjava -jar $SRCROOT/Tools/yuicompressor-2.4.2.jar -o $TARGET_BUILD_DIR/$TARGET_NAME/Javascripts/$FILENAME $FILE\ndone";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D5B49B1048680CD000E48DA /* Sources */ = {
@@ -301,7 +306,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "JSCocoaLoader" */ = {
+		1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "JSCocoaLoader.sugar" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1DEB913B08733D840010E9CD /* Debug */,
