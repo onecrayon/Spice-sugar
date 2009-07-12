@@ -24,6 +24,7 @@
 		7AB5643D0FFFBA22003DC051 /* JSCocoaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaLoader.m; path = source/JSCocoaLoader.m; sourceTree = "<group>"; };
 		7AB564900FFFD724003DC051 /* JSCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSCocoa.framework; sourceTree = "<group>"; };
 		7AE86144100A352400CEE589 /* mootools-system.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "mootools-system.js"; sourceTree = "<group>"; };
+		7AE86151100A41FE00CEE589 /* espresso.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = espresso.js; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* JSCocoaLoader.sugar */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSCocoaLoader.sugar; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -128,6 +129,7 @@
 		7AB2B4D51000FBB000158603 /* Javascripts */ = {
 			isa = PBXGroup;
 			children = (
+				7AE86151100A41FE00CEE589 /* espresso.js */,
 				7AE86144100A352400CEE589 /* mootools-system.js */,
 				7AB2B4D61000FBB000158603 /* import.js */,
 			);
