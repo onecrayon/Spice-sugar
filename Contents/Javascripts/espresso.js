@@ -74,6 +74,8 @@ SXSelectorGroup
 */
 
 // ITEMIZER UTILITIES
+// TODO: convert to Mootools class?
+// TODO: integrate this and other direct actions (like those in Selection) into a class for interacting with the TextAction context?
 var Item = new Class({
 	getByRange: function(range) {
 		if (!range.rangeValue)
@@ -103,6 +105,7 @@ var Item = new Class({
 
 // SELECTION UTILITIES
 var Selection = new Class({
+
 	set: function(ranges) {
 		ranges = Array.prototype.map.call(ranges, function(range){
 			if ($type(range) !== 'range')
@@ -121,7 +124,7 @@ var Selection = new Class({
 		expandTo = expandTo || 'Item';
 		this['expandTo' + expandTo]();
 	},
-	expandToItem: function selectCurrentItemizer() {
+	expandToItem: function() {
 		var newRanges = [];
 		var selectedRanges = Selection.get();
 		selectedRanges.each(function(range) {
@@ -137,21 +140,21 @@ var Snippet = new Class({
 		this.text = text;
 	},
 	snippet: function() {
-		return CETextRecipe.snippetWithString(this.text);
+		return CETextSnippet.snippetWithString(this.text);
 	},
 	write: function() {
-		return context.insertTextSnippet(this.snippet);
+		return context.insertTextSnippet(this.snippet());
 	}
 });
+
 String.implement({
 	toSnippet: function() {
-		return new Snippet(this);
+		return new Snippet(String(this));
 	},
 	sanitizedForSnippet: function() {
 		return this.replace(/(\$|\{|\}|`)/g, '\\$1');
 	},
 	log: function() {
-		console.log(this);
-		return this;
+		console.log(String(this));
 	}
 });
