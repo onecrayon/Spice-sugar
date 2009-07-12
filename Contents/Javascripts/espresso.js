@@ -10,31 +10,57 @@ var console = {
 	}
 }
 
-// TODO: convert this to a Mootools class
-function Range(location, length){
-	if (this instanceof Range) throw new Error("Don't use `new Range()`; use `Range()`"); // TODO: Reverse this logic once implemented as a MooTools class?
-	return NSMakeRange(location, length);
-};
-Range.from = function(shouldBeRange){
-	if (shouldBeRange.rangeValue)
-		return Range.from(shouldBeRange.rangeValue);
-	
-	if ($type(shouldBeRange) === 'array')
-		return Range(shouldBeRange[0], shouldBeRange.length === 1 ? 0 : shouldBeRange[shouldBeRange.length-1]);
-	
-	if (/number|string/.test($type(shouldBeRange)))
-		return Range(shouldBeRange, 0);
-	
-	if (shouldBeRange && $type(shouldBeRange.location)==='number' && $type(shouldBeRange.length)==='number')
-		return Range(shouldBeRange.location, shouldBeRange.length);
-};
-Range.match = function(rangeA, rangeB){
-	rangeA = Range.from(rangeA);
-	rangeB = Range.from(rangeB);
-	return  rangeA.location == rangeB.location &&
-			rangeA.length == rangeB.length
-	;
-};
+var Range = new Class({
+	initialize: function(target, length) {
+		if (target && target.rangeValue) {
+			// Convert from NSValue
+			var range = target.rangeValue;
+			this.location = range.location;
+			this.length = range.length;
+		} else if (target && $type(target.location) === 'number' && $type(target.length) === 'number') {
+			// Convert from NSRange or Range
+			this.location = target.location;
+			this.length = target.length;
+		} else if ($type(target) === 'array') {
+			// Convert from array
+			this.location = target[0];
+			this.length = target[1];
+		} else if ($type(target) === 'number' && $type(length) === 'number') {
+			this.location = target;
+			this.length = length;
+		} else {
+			// If nothing is passed, default to a blank range
+			if (!$type(target)) this.location = 0;
+			else this.location = target;
+			
+			if (!$type(location)) this.location = 0;
+			else this.location = location;
+		}
+	},
+	rangeValue: function() {
+		return NSMakeRange(this.location, this.length);
+	},
+	value: function() {
+		return NSValue.valueWithRange(this.rangeValue);
+	},
+	equals: function(secondRange) {
+		// Checks if the current range is identical to the passed range
+		var secondRange = new Range(secondRange);
+		return this.location == secondRange.location && this.length == secondRange.length;
+	},
+	contains: function(secondRange) {
+		// Checks if the current range contains the passed range
+		var secondRange = new Range(secondRange);
+		return this.location <= secondRange.location && ((this.location + this.length) >= (secondRange.location + secondRange.length));
+	},
+	inside: function(secondRange) {
+		// Checks if the current range is contained by the passed range
+		var secondRange = new Range(secondRange);
+		return secondRange.contains(this);
+	}
+});
+
+
 
 // Espresso-specific helpers ====================================
 
@@ -47,54 +73,85 @@ CETextSnippet
 SXSelectorGroup
 */
 
-// TODO: Convert to Mootools class
-function Item(){};
-Item.getByRange = function(range){
-	return context.itemizer.smallestItemContainingCharacterRange(range);
-};
-Item.getParentByRange = function(range){
-	range = Range.from(range);
-	var item = Item.getByRange(range);
-	var newRange = item.range;
-	
-	// Select the parent if the range is the same
-	while (Range.match(newRange, range) && item.parent) {
-		item = item.parent;
-		newRange = item.range;
-	};
-	return item;
-};
-Item.fromRange = function(range, getParentIfMatch){
-	if (getParentIfMatch)
-		return Item.getParentByRange(range);
-	else
-		return Item.getByRange(range);
-};
+// ITEMIZER UTILITIES
+var Item = new Class({
+	getByRange: function(range) {
+		if (!range.rangeValue)
+			var range = new Range(range);
+		return context.itemizer.smallestItemContainingCharacterRange(range.rangeValue);
+	},
+	getParentByRange: function(range) {
+		if ($type(range) !== 'range')
+			var range = new Range(range);
+		var item = Item.getByRange(range);
+		var newRange = new Range(item.range);
+		
+		// Select the parent if the range is the same
+		while (newRange.equals(range) && item.parent) {
+			item = item.parent;
+			newRange = new Range(item.range);
+		};
+		return item;
+	},
+	fromRange: function(range, getParentIfMatch) {
+		if (getParentIfMatch)
+			return Item.getParentByRange(range);
+		else
+			return Item.getByRange(range);
+	}
+});
 
+// SELECTION UTILITIES
+var Selection = new Class({
+	set: function(ranges) {
+		ranges = Array.prototype.map.call(ranges, function(range){
+			if ($type(range) !== 'range')
+				var range = new Range(range);
+			return range.value;
+		});
+		return context.setSelectedRanges(ranges);
+	},
+	get: function() {
+		ranges = context.selectedRanges;
+		return Array.prototype.map.call(ranges, function(range) {
+			return new Range(range);
+		});
+	},
+	expand: function(expandTo) {
+		expandTo = expandTo || 'Item';
+		this['expandTo' + expandTo]();
+	},
+	expandToItem: function selectCurrentItemizer() {
+		var newRanges = [];
+		var selectedRanges = Selection.get();
+		selectedRanges.each(function(range) {
+			newRanges.push(Item.fromRange(range, true).range);
+		});
+		return Selection.set(newRanges);
+	}
+});
 
-// TODO: Convert to Mootools class
-function Selection(){};
-Selection.set = function(ranges){
-	ranges = Array.prototype.map.call(ranges, function(range){
-		return NSValue.valueWithRange(Range.from(range));
-	});
-	context.setSelectedRanges(ranges);
-	// return this; // TODO: Make Selection OOP
-	return ranges;
-}
-Selection.get = function(){
-	return context.selectedRanges;
-};
-Selection.expand = function(expandTo){
-	expandTo = expandTo || 'Item';
-	Selection['expandTo' + expandTo]();
-}
-Selection.expandToItem = function selectCurrentItemizer(){
-	var newRanges = [];
-	var selectedRanges = Selection.get();
-	
-	for (var i=0; i < selectedRanges.length; i++)
-		newRanges.push(Item.fromRange(selectedRanges[i], true).range);
-	
-	return Selection.set(newRanges);
-};
+// SNIPPET UTILITIES
+var Snippet = new Class({
+	initialize: function(text) {
+		this.text = text;
+	},
+	snippet: function() {
+		return CETextRecipe.snippetWithString(this.text);
+	},
+	write: function() {
+		return context.insertTextSnippet(this.snippet);
+	}
+});
+String.implement({
+	toSnippet: function() {
+		return new Snippet(this);
+	},
+	sanitizedForSnippet: function() {
+		return this.replace(/(\$|\{|\}|`)/g, '\\$1');
+	},
+	log: function() {
+		console.log(this);
+		return this;
+	}
+});

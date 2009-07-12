@@ -200,7 +200,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "for FILE in $SRCROOT/Contents/Javascripts/*.js\ndo\n\tFILENAME=${FILE##*/}; \n\tjava -jar $SRCROOT/Tools/yuicompressor-2.4.2.jar -o $TARGET_BUILD_DIR/$TARGET_NAME/Javascripts/$FILENAME $FILE\ndone";
+			shellScript = "for FILE in $SRCROOT/Contents/Javascripts/*.js\ndo\n\tFILENAME=${FILE##*/};\n\tDIRECTORY=\"$TARGET_BUILD_DIR/$TARGET_NAME/Javascripts\"\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t\tmkdir \"$DIRECTORY\";\n\tfi\n\tjava -jar $SRCROOT/Tools/yuicompressor-2.4.2.jar -o \"$DIRECTORY/$FILENAME\" \"$FILE\";\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 
