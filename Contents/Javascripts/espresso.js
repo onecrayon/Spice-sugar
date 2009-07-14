@@ -1,6 +1,6 @@
 // Utility methods for working with Espresso
 
-importJS('mootools-system');
+importJS('mootools-server');
 
 // Generic Cocoa helper objects =================================
 
