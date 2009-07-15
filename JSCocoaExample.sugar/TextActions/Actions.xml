@@ -14,10 +14,10 @@
 	</action>
 	<action id="com.yourdomain.action.id2" category="category.id">
 		<class>JSCocoaLoader</class>
-		<title>Select Current Itemizer</title>
+		<title>Select Current Itemizer Item</title>
 		<key-equivalent>command shift b</key-equivalent>
 		<setup>
-			<script>select_current_itemizer</script>
+			<script>select_current_itemizer_item</script>
 		</setup>
 	</action>
 </action-recipes>
