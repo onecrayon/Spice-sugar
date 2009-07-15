@@ -17,9 +17,9 @@ var TextActionContext = new Class({
 	},
 	getSelections: function() {
 		ranges = context.selectedRanges;
-//		return Array.map(ranges, function(range){
-//			return new Range(range);
-//		});
+		// return Array.map(ranges, function(range){
+		// 	return new Range(range);
+		// });
 		return Array.slice(ranges);
 	},
 	getFirstSelection: function() {
