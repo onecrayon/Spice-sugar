@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<action-recipes>
+	<action id="com.yourdomain.action.id" category="category.id">
+		<class>JSCocoaLoader</class>
+		<title>Hello World (JSCocoa)</title>
+		<setup>
+			<script>hello_world</script>
+			<arguments>
+				<array>
+					<string>Hello World${1:, JSCocoa!}</string>
+				</array>
+			</arguments>
+		</setup>
+	</action>
+	<action id="com.yourdomain.action.id2" category="category.id">
+		<class>JSCocoaLoader</class>
+		<title>Select Current Itemizer</title>
+		<key-equivalent>command shift b</key-equivalent>
+		<setup>
+			<script>select_current_itemizer</script>
+		</setup>
+	</action>
+</action-recipes>
