@@ -6,6 +6,7 @@
 
 // TEXT ACTION UTILITIES
 var TextActionContext = new Class({
+	
 	// Selection functions
 	setSelections: function(ranges) {
 		ranges = Array.prototype.map.call(ranges, function(range){
@@ -15,6 +16,7 @@ var TextActionContext = new Class({
 		});
 		context.setSelectedRanges(ranges);
 	},
+	
 	getSelections: function() {
 		ranges = context.selectedRanges;
 		// return Array.map(ranges, function(range){
@@ -22,13 +24,16 @@ var TextActionContext = new Class({
 		// });
 		return Array.slice(ranges);
 	},
+	
 	getFirstSelection: function() {
 		return new Range(context.selectedRanges[0]);
 	},
+	
 	expandSelection: function(expandTo) {
 		expandTo = expandTo || 'Item';
 		this['expandSelectionTo' + expandTo]();
 	},
+	
 	expandSelectionToItem: function() {
 		var newRanges = [];
 		this.getSelections().each(function(range) {
@@ -36,12 +41,14 @@ var TextActionContext = new Class({
 		}, this);
 		return this.setSelections(newRanges);
 	},
+	
 	// Itemizer functions
 	getItemByRange: function(range) {
 		if ($type(range) !== 'range')
 			var range = new Range(range);
 		return context.itemizer.smallestItemContainingCharacterRange(range.rangeValue());
 	},
+	
 	getItemParentByRange: function(range) {
 		var item = this.getItemByRange(range);
 		var newRange = new Range(item.range);
@@ -56,6 +63,7 @@ var TextActionContext = new Class({
 		};
 		return item;
 	},
+	
 	itemFromRange: function(range, getParentIfMatch) {
 		if (getParentIfMatch)
 			return this.getItemParentByRange(range);
