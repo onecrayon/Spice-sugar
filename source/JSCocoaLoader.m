@@ -59,7 +59,9 @@
 	// Setup the search paths
 	// These paths should always be searched
 	NSArray *default_paths = [NSArray arrayWithObjects:
+		[@"~/Library/Application Support/Espresso/Support/lib/" stringByExpandingTildeInPath],
 		[@"~/Library/Application Support/Espresso/TEA/Scripts/" stringByExpandingTildeInPath],
+		[[self bundlePath] stringByAppendingPathComponent:@"Support/lib/"],
 		[[self bundlePath] stringByAppendingPathComponent:@"Javascripts/"],
 		[[self bundlePath] stringByAppendingPathComponent:@"TEA/"],
 		nil
@@ -97,7 +99,7 @@
 	
 	NSString *path = [self findScript:[self script]];
 	if (path == nil) {
-		[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/TEA/Scripts/" inContext:context];
+		[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/Support/lib/" inContext:context];
 		return NO;
 	}
 	
