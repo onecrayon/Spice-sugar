@@ -53,9 +53,6 @@ var TextActionContext = new Class({
 		var item = this.getItemByRange(range);
 		var newRange = new Range(item.range);
 		
-		newRange.log();
-		new Range(range).log();
-		
 		// Select the parent if the range is the same
 		while (newRange.equals(range) && item.parent) {
 			item = item.parent;
