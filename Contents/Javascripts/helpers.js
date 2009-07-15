@@ -2,7 +2,7 @@
 
 var console = {
 	log: function(message){
-		if (message && message.log typeof 'function') message = message.log();
+		if (message && message.log typeof 'function') return message.log();
 		JSCocoaController.log(message);
 	}
 }
