@@ -216,7 +216,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "for FILE in \"$SRCROOT\"/Contents/Javascripts/*.js\ndo\n\tFILENAME=\"${FILE##*/}\";\n\tDIRECTORY=\"$TARGET_BUILD_DIR/$TARGET_NAME/Javascripts\"\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t\tmkdir \"$DIRECTORY\";\n\tfi\n\tcp \"$FILE\" \"$DIRECTORY/$FILENAME\";\ndone";
+			shellScript = "for FILE in \"$SRCROOT\"/Contents/Javascripts/*.js\ndo\n\tFILENAME=\"${FILE##*/}\";\n\tDIRECTORY=\"$TARGET_BUILD_DIR/$TARGET_NAME/Javascripts\"\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t\tmkdir \"$DIRECTORY\";\n\tfi\n\tcp -f \"$FILE\" \"$DIRECTORY/$FILENAME\";\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 
