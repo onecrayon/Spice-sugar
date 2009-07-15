@@ -42,7 +42,7 @@ String.implement({
 	},
 	
 	sanitizedForSnippet: function() {
-		return this.replace(/(\$|\{|\}|`)/g, '\\$1');
+		return this.replace(/(\$|\{|\}|`|\\)/g, '\\$1');
 	},
 	
 	log: function() {
