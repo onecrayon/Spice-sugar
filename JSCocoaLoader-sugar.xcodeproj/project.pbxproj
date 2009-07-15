@@ -8,10 +8,25 @@
 
 /* Begin PBXBuildFile section */
 		7AB5643E0FFFBA22003DC051 /* JSCocoaLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AB5643D0FFFBA22003DC051 /* JSCocoaLoader.m */; };
-		7AB564910FFFD724003DC051 /* JSCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AB564900FFFD724003DC051 /* JSCocoa.framework */; };
+		7AFA3C6C100E32BE00835DBA /* JSCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */; };
+		7AFA3C73100E32F500835DBA /* JSCocoa.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7AFA3C7F100E333800835DBA /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7AFA3C73100E32F500835DBA /* JSCocoa.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C1672FE841209C02AAC07 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
@@ -22,9 +37,9 @@
 		7AB2B4D61000FBB000158603 /* import.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = import.js; sourceTree = "<group>"; };
 		7AB5643C0FFFBA22003DC051 /* JSCocoaLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSCocoaLoader.h; path = source/JSCocoaLoader.h; sourceTree = "<group>"; };
 		7AB5643D0FFFBA22003DC051 /* JSCocoaLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JSCocoaLoader.m; path = source/JSCocoaLoader.m; sourceTree = "<group>"; };
-		7AB564900FFFD724003DC051 /* JSCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSCocoa.framework; sourceTree = "<group>"; };
-		7AE86144100A352400CEE589 /* mootools-system.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "mootools-system.js"; sourceTree = "<group>"; };
 		7AE86151100A41FE00CEE589 /* espresso.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = espresso.js; sourceTree = "<group>"; };
+		7AFA3C40100E2F8100835DBA /* mootools-server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "mootools-server.js"; sourceTree = "<group>"; };
+		7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSCocoa.framework; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* JSCocoaLoader.sugar */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JSCocoaLoader.sugar; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -36,7 +51,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
-				7AB564910FFFD724003DC051 /* JSCocoa.framework in Frameworks */,
+				7AFA3C6C100E32BE00835DBA /* JSCocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +74,7 @@
 		089C1671FE841209C02AAC07 /* Frameworks and Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				7AB564900FFFD724003DC051 /* JSCocoa.framework */,
+				7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */,
 				1058C7ACFEA557BF11CA2CBB /* Linked Frameworks */,
 				1058C7AEFEA557BF11CA2CBB /* Other Frameworks */,
 			);
@@ -129,8 +144,8 @@
 		7AB2B4D51000FBB000158603 /* Javascripts */ = {
 			isa = PBXGroup;
 			children = (
+				7AFA3C40100E2F8100835DBA /* mootools-server.js */,
 				7AE86151100A41FE00CEE589 /* espresso.js */,
-				7AE86144100A352400CEE589 /* mootools-system.js */,
 				7AB2B4D61000FBB000158603 /* import.js */,
 			);
 			path = Javascripts;
@@ -146,7 +161,8 @@
 				8D5B49AF048680CD000E48DA /* Resources */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
-				7AE86131100A31EA00CEE589 /* Compress Javascripts */,
+				7AFA3C7F100E333800835DBA /* Copy Frameworks */,
+				7AE86131100A31EA00CEE589 /* Copy Javascripts */,
 			);
 			buildRules = (
 			);
@@ -187,7 +203,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7AE86131100A31EA00CEE589 /* Compress Javascripts */ = {
+		7AE86131100A31EA00CEE589 /* Copy Javascripts */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			comments = "Compresses all Javascripts bundled with the app and copies them to the built project";
@@ -195,12 +211,12 @@
 			);
 			inputPaths = (
 			);
-			name = "Compress Javascripts";
+			name = "Copy Javascripts";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "for FILE in \"$SRCROOT\"/Contents/Javascripts/*.js\ndo\n\tFILENAME=\"${FILE##*/}\";\n\tDIRECTORY=\"$TARGET_BUILD_DIR/$TARGET_NAME/Javascripts\"\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t\tmkdir \"$DIRECTORY\";\n\tfi\n\tjava -jar \"$SRCROOT/Tools/yuicompressor-2.4.2.jar\" -o \"$DIRECTORY/$FILENAME\" \"$FILE\";\ndone";
+			shellScript = "for FILE in \"$SRCROOT\"/Contents/Javascripts/*.js\ndo\n\tFILENAME=\"${FILE##*/}\";\n\tDIRECTORY=\"$TARGET_BUILD_DIR/$TARGET_NAME/Javascripts\"\n\tif [ ! -d \"$DIRECTORY\" ]; then\n\t\tmkdir \"$DIRECTORY\";\n\tfi\n\tcp \"$FILE\" \"$DIRECTORY/$FILENAME\";\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 

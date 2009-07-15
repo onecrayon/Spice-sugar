@@ -3,8 +3,8 @@
 //  JSCocoaLoader.sugar
 //
 //  Created by Ian Beck on 7/4/09.
-//  Copyright 2009 One Crayon. All rights reserved.
 //
+// MIT License
 
 #import <Cocoa/Cocoa.h>
 
