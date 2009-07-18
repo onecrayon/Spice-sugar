@@ -2,9 +2,10 @@
 //  JSCocoaLoader.h
 //  JSCocoaLoader.sugar
 //
-//  Created by Ian Beck on 7/4/09.
+//  Created by Ian Beck
+//  http://onecrayon.com
 //
-// MIT License
+//  MIT License
 
 #import <Cocoa/Cocoa.h>
 
@@ -12,7 +13,7 @@
 @interface JSCocoaLoader : NSObject {
 	// Name of the script to run
 	NSString *script;
-	NSArray *paths;
+	NSArray *supportPaths;
 	// Arguments to pass to the script (array)
 	NSArray *arguments;
 	// This is the function we'll try to call from the Javascript
@@ -32,9 +33,9 @@
 @property (readonly,copy) NSString* undoName;
 
 @property (copy) NSString* target;
-@property (retain) NSArray* paths;
+@property (retain) NSArray* supportPaths;
 
-- (NSString *)findScript:(NSString *)file;
+- (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders;
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
 
 @end
