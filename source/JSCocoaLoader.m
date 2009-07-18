@@ -2,9 +2,10 @@
 //  JSCocoaLoader.m
 //  JSCocoaLoader.sugar
 //
-//  Created by Ian Beck on 7/4/09.
+//  Created by Ian Beck
+//  http://onecrayon.com
 //
-// MIT License
+//  MIT License
 
 #import "JSCocoaLoader.h"
 #import <JSCocoa/JSCocoa.h>
@@ -27,7 +28,7 @@
 @implementation JSCocoaLoader
 
 @synthesize script;
-@synthesize paths;
+@synthesize supportPaths;
 @synthesize arguments;
 @synthesize undoName;
 @synthesize syntaxContext;
@@ -56,20 +57,19 @@
 	// We need to remember the bundle path so we can check for scripts various places
 	[self setBundlePath:myBundlePath];
 	
-	// Setup the search paths
+	// Setup the support paths; we'll use these locations to find files
 	// These paths should always be searched
 	NSArray *default_paths = [NSArray arrayWithObjects:
-		[@"~/Library/Application Support/Espresso/TEA/Scripts/" stringByExpandingTildeInPath],
-		[[self bundlePath] stringByAppendingPathComponent:@"Javascripts/"],
-		[[self bundlePath] stringByAppendingPathComponent:@"TEA/"],
+		[@"~/Library/Application Support/Espresso/Support" stringByExpandingTildeInPath],
+		[[self bundlePath] stringByAppendingPathComponent:@"Support"],
 		nil
 	];
 	// This path might need to be searched if we aren't in the JSCocoaLoader bundle
 	NSString *jclPath = [[NSBundle bundleWithIdentifier:@"com.onecrayon.jscocoaloader"] bundlePath];
 	if ([[self bundlePath] compare:jclPath] != NSOrderedSame) {
-		[self setPaths:[default_paths arrayByAddingObject:[jclPath stringByAppendingPathComponent:@"Javascripts/"]]];
+		[self setSupportPaths:[default_paths arrayByAddingObject:[jclPath stringByAppendingPathComponent:@"Support"]]];
 	} else {
-		[self setPaths:[NSArray arrayWithArray:default_paths]];
+		[self setSupportPaths:[NSArray arrayWithArray:default_paths]];
 	}
 	
 	return self;
@@ -95,7 +95,7 @@
 		return NO;
 	}
 	
-	NSString *path = [self findScript:[self script]];
+	NSString *path = [self findScript:[self script] inFolders:[NSArray arrayWithObject:@"Scripts"]];
 	if (path == nil) {
 		[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/TEA/Scripts/" inContext:context];
 		return NO;
@@ -110,8 +110,8 @@
 	[jsc setObject:[CETextSnippet class] withName:@"CETextSnippet"];
 	[jsc setObject:[SXSelectorGroup class] withName:@"SXSelectorGroup"];
 	
-	// Load up the standard import library (for easy asset importing within Javascript)
-	[jsc evalJSFile:[self findScript:@"import.js"]];
+	// Load up the standard library (for file system access via Javascript)
+	[jsc evalJSFile:[self findScript:@"system.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
 	
 	// Load up the file
 	[jsc evalJSFile:path];
@@ -141,19 +141,24 @@
 	return result;
 }
 
-- (NSString *)findScript:(NSString *)fileName {
+- (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders {
 	// Make sure the script has .js on the end
 	if ([[fileName pathExtension] compare:@"js"] != NSOrderedSame) {
 		// Is there a memory leak here? Might need to do [[fileName autorelease] stringByAppendingString:@".js"] instead
 		fileName = [fileName stringByAppendingString:@".js"];
 	}
 	// Iterate over the array and check if the paths exist
-	NSFileManager *manager = [NSFileManager defaultManager];
 	NSString *path = nil;
 	
-	for (NSString* testPath in [self paths]) {
-		if ([manager fileExistsAtPath:[testPath stringByAppendingPathComponent:fileName]]) {
-			path = [testPath stringByAppendingPathComponent:fileName];
+	for (NSString* supportPath in [self supportPaths]) {
+		for (NSString* testPath in folders) {
+			NSString *targetPath = [[supportPath stringByAppendingPathComponent:testPath] stringByAppendingPathComponent:fileName];
+			if ([[NSFileManager defaultManager] fileExistsAtPath:targetPath]) {
+				path = targetPath;
+				break;
+			}
+		}
+		if (path != nil) {
 			break;
 		}
 	}
