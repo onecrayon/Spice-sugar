@@ -22,6 +22,7 @@
 @property (readwrite,copy) NSString* syntaxContext;
 @property (readwrite,copy) NSString* bundlePath;
 @property (readwrite,copy) NSString* undoName;
+@property (readwrite) BOOL noFrills;
 @end
 
 // The actual implementation of the class
@@ -34,6 +35,7 @@
 @synthesize syntaxContext;
 @synthesize bundlePath;
 @synthesize target;
+@synthesize noFrills;
 
 - (id)initWithDictionary:(NSDictionary *)dictionary bundlePath:(NSString *)myBundlePath {
 	self = [super init];
@@ -56,6 +58,9 @@
 	[self setSyntaxContext:[dictionary objectForKey:@"syntax-context"]];
 	// We need to remember the bundle path so we can check for scripts various places
 	[self setBundlePath:myBundlePath];
+	
+	// Check for no-frills parsing
+	[self setNoFrills:[[dictionary valueForKey:@"no-frills"] boolValue]];
 	
 	// Setup the support paths; we'll use these locations to find files
 	// These paths should always be searched
@@ -95,12 +100,6 @@
 		return NO;
 	}
 	
-	NSString *path = [self findScript:[self script] inFolders:[NSArray arrayWithObject:@"Scripts"]];
-	if (path == nil) {
-		[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/Support/lib/" inContext:context];
-		return NO;
-	}
-	
 	// Time to initialize JSCocoa
 	JSCocoaController *jsc = [JSCocoa new];
 	[jsc setObject:self	withName:@"JSCocoaLoaderController"];
@@ -110,26 +109,42 @@
 	[jsc setObject:[CETextSnippet class] withName:@"CETextSnippet"];
 	[jsc setObject:[SXSelectorGroup class] withName:@"SXSelectorGroup"];
 	
-	// Load up the standard library (for file system access via Javascript)
-	[jsc evalJSFile:[self findScript:@"system.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
-	
-	// Load up the file
-	[jsc evalJSFile:path];
-	
-	if ([self target] == nil) {
-		if ([jsc hasJSFunctionNamed:@"act"]) {
-			[self setTarget:@"act"];
-		} else if ([jsc hasJSFunctionNamed:@"main"]) {
-			[self setTarget:@"main"];
-		}
-	} else if (![jsc hasJSFunctionNamed:[self target]]) {
-		[self setTarget:nil];
-	}
-	
-	// Run the function, if it exists
 	BOOL result = YES;
-	if ([self target] != nil) {
-		JSValueRef returnValue = [jsc callJSFunctionNamed:[self target] withArgumentsArray:[self arguments]];
+	
+	// No frills mode just executes the file
+	if ([self noFrills]) {
+		NSString *path = [self findScript:[self script] inFolders:[NSArray arrayWithObject:@"Scripts"]];
+		if (path == nil) {
+			[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/Support/lib/" inContext:context];
+			return NO;
+		}
+		
+		// Load up the file
+		[jsc evalJSFile:path];
+		
+		if ([self target] == nil) {
+			if ([jsc hasJSFunctionNamed:@"act"]) {
+				[self setTarget:@"act"];
+			} else if ([jsc hasJSFunctionNamed:@"main"]) {
+				[self setTarget:@"main"];
+			}
+		} else if (![jsc hasJSFunctionNamed:[self target]]) {
+			[self setTarget:nil];
+		}
+		
+		// Run the function, if it exists
+		if ([self target] != nil) {
+			JSValueRef returnValue = [jsc callJSFunctionNamed:[self target] withArgumentsArray:[self arguments]];
+			if (![jsc unboxJSValueRef:returnValue]) {
+				result = NO;
+			}
+		}
+	} else {
+		// Pass off handling to the Javascript system
+		[jsc evalJSFile:[self findScript:@"system.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
+		
+		// Run the bootstrapping function, which handles all further execution of scripts
+		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_JSCocoaLoader" withArguments:[self script], nil];
 		if (![jsc unboxJSValueRef:returnValue]) {
 			result = NO;
 		}

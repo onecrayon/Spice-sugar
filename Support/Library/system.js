@@ -92,7 +92,7 @@ var bootstrap_JSCocoaLoader = function(script) {
 		return exports
 	}
 	
-	var require.global = function(file) {
+	require.global = function(file) {
 		// Shortcut to do a global load; returns true (loaded/already loaded) or false
 		return require(file, false, true);
 	}

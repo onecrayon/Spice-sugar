@@ -24,6 +24,8 @@
 	NSString *syntaxContext;
 	// Bundle path is useful for finding scripts in multiple locations
 	NSString *bundlePath;
+	// Used to bypass JSCocoaLoader's Javascript system and just run the script straight up
+	BOOL noFrills;
 }
 
 @property (readonly,copy) NSString* script;
@@ -31,6 +33,7 @@
 @property (readonly,copy) NSString* syntaxContext;
 @property (readonly,copy) NSString* bundlePath;
 @property (readonly,copy) NSString* undoName;
+@property (readonly) BOOL noFrills;
 
 @property (copy) NSString* target;
 @property (retain) NSArray* supportPaths;
