@@ -37,5 +37,7 @@
 
 - (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders;
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
+- (BOOL)isFile:(NSString *)path;
+- (NSString *)read:(NSString *)path;
 
 @end

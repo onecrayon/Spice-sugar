@@ -95,5 +95,11 @@ var bootstrap_JSCocoaLoader = function(script) {
 	var require.global = function(file) {
 		// Shortcut to do a global load; returns true (loaded/already loaded) or false
 		return require(file, false, true);
-	}	
+	}
+	
+	// Now that we've got the basic logic setup, it's time to actually run the script
+	// Load with require
+	// Check for existence of act, main, or specified target function
+	// Call function if it exists
+	// If no function, return? It'll already have been evaluated as part of the require
 }

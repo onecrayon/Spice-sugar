@@ -187,4 +187,12 @@
 	}
 }
 
+- (BOOL)isFile:(NSString *)path {
+	return [[NSFileManager defaultManager] fileExistsAtPath:path];
+}
+
+- (NSString *)read:(NSString *)path {
+	return [NSString stringWithContentsOfFile:path];
+}
+
 @end
