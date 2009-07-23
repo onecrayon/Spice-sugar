@@ -1,7 +1,9 @@
 // Generic Cocoa helper objects =================================
 
-var console = {
+// Is this necessary anymore now that we've got system.print and system.log (with all its variations)?
+
+exports.console = {
 	log: function(message){
-		JSCocoaController.log(message);
+		system.print(message);
 	}
 }

@@ -4,9 +4,6 @@
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 
-importJS('mootools-server');
-
-importJS('helpers');
-importJS('range');
-importJS('snippet');
-importJS('text_action_context');
+var Range = require('range').Range;
+var Snippet = require('snippet').Snippet;
+var textContext = require('text_action_context').textContext;

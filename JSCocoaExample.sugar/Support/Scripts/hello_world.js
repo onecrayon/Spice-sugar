@@ -1,7 +1,6 @@
-var esp = require('espresso');
+var Snippet = require('snippet');
 
 exports.main = function(snippet) {
-	system.print('we are in main');
 	snippet.toSnippet().write();
 	return true;
 }

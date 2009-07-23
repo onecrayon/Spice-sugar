@@ -15,6 +15,8 @@ CETextSnippet
 SXSelectorGroup
 */
 
+require.global('mootools-server');
+
 // SNIPPET UTILITIES
 var Snippet = new Class({
 	
@@ -34,6 +36,8 @@ var Snippet = new Class({
 		console.log(this.text);
 	}
 });
+
+exports.Snippet = Snippet;
 
 String.implement({
 	

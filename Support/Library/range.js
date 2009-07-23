@@ -4,7 +4,7 @@
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 
-importJS('mootools-server');
+require.global('mootools-server');
 
 var Range = new Class({
 
@@ -75,3 +75,5 @@ var Range = new Class({
 Range.from = function(range){
 	return new Range(range);
 };
+
+exports.Range = Range;

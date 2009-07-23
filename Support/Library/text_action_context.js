@@ -4,6 +4,8 @@
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 
+require.global('mootools-server');
+
 // TEXT ACTION UTILITIES
 var TextActionContext = new Class({
 	
@@ -69,4 +71,5 @@ var TextActionContext = new Class({
 	}
 });
 
-var textContext = new TextActionContext();
+exports.textContext = new TextActionContext();
+exports.TextActionContext = TextActionContext;
