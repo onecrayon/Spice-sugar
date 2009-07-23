@@ -1,19 +1,8 @@
-// Utility methods for working with Espresso
+// Utility methods for working with Espresso text snippets
 // Created by:
-//     Ian Beck / OneCrayon -- http://beckism.com/
+//     Ian Beck / OneCrayon -- http://onecrayon.com/
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
-
-// Espresso-specific helpers ====================================
-
-// TODO: add support for all basic text manipulations
-/* Following classes are exported and available in addition to text action context:
-
-MRRangeSet
-CETextRecipe
-CETextSnippet
-SXSelectorGroup
-*/
 
 require.global('mootools-server');
 

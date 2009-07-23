@@ -1,16 +1,10 @@
-// This function is going to die very, very soon
-// Merely here to provide a way to load scripts while testing require()
-function importJS(file, searchScripts) {
-	var searchScripts = (typeof searchScripts !== 'undefined' ? searchScripts : false);
-	if (searchScripts) {
-		var folders = new Array('Scripts', 'Library');
-	} else {
-		var folders = new Array('Library');
-	}
-	file = JSCocoaLoaderController.findScript_inFolders_(file, folders);
-	if (file == null) throw new Error("Cannot find the file '"+file+"'");
-	else __jsc__.evalJSFile(file);
-}
+// The guts of JSCocoaLoader
+// Sets up the modular environment to enable scripts and helper modules
+//
+// Created by:
+//     Ian Beck / OneCrayon -- http://onecrayon.com/
+//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
+// MIT License
 
 // Handles setting up the modular environment
 // Can't be an anonymous function because JSCocoaLoader has to be able to get a return value
@@ -29,7 +23,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 	};
 	
 	// This function powers Javascript inclusions
-	// File is the only required variable
+	// `file` is the only required variable
 	var require = function(file, filePaths, loadGlobally, forceReload) {
 		// filePaths is an optional array or string of paths to search within the support folders
 		var filePaths = (typeof filePaths !== 'undefined' ? filePaths : null);

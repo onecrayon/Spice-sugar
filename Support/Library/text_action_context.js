@@ -1,6 +1,6 @@
-// Utility methods for working with Espresso
+// Convenience method for working with the context for TextActions
 // Created by:
-//     Ian Beck / OneCrayon -- http://beckism.com/
+//     Ian Beck / OneCrayon -- http://onecrayon.com/
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 

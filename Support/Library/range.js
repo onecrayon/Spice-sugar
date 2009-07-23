@@ -1,6 +1,6 @@
-// Utility methods for working with Espresso
+// Class for creating, comparing, and otherwise handling text ranges
 // Created by:
-//     Ian Beck / OneCrayon -- http://beckism.com/
+//     Ian Beck / OneCrayon -- http://onecrayon.com/
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 
