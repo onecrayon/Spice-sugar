@@ -123,10 +123,10 @@
 		[jsc evalJSFile:path];
 		
 		if ([self target] == nil) {
-			if ([jsc hasJSFunctionNamed:@"act"]) {
-				[self setTarget:@"act"];
-			} else if ([jsc hasJSFunctionNamed:@"main"]) {
+			if ([jsc hasJSFunctionNamed:@"main"]) {
 				[self setTarget:@"main"];
+			} else if ([jsc hasJSFunctionNamed:@"act"]) {
+				[self setTarget:@"act"];
 			}
 		} else if (![jsc hasJSFunctionNamed:[self target]]) {
 			[self setTarget:nil];
@@ -144,7 +144,7 @@
 		[jsc evalJSFile:[self findScript:@"system.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
 		
 		// Run the bootstrapping function, which handles all further execution of scripts
-		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_JSCocoaLoader" withArguments:[self script], nil];
+		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_JSCocoaLoader" withArguments:[self script], [self arguments], nil];
 		if (![jsc unboxJSValueRef:returnValue]) {
 			result = NO;
 		}

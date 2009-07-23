@@ -1,6 +1,7 @@
-importJS('espresso');
+var esp = require('espresso');
 
-function main(snippet) {
+exports.main = function(snippet) {
+	system.print('we are in main');
 	snippet.toSnippet().write();
 	return true;
 }
