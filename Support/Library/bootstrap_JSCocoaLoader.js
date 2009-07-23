@@ -14,7 +14,8 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 		JSCocoaController.log(String(message));
 	};
 	
-	var log = {fatal:shim, error:shim, warn:shim, info:shim, debug:shim};
+	var log = shim;
+	log.fatal = log.error = log.warn = log.info = log.debug = shim;
 	
 	var system = {
 		log: log,
