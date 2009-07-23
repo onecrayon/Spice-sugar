@@ -1,7 +1,7 @@
-importJS('espresso');
+var textContext = require('text_action_context').textContext;
 
 // Implementation
-var main = function() {
+exports.main = function() {
 	textContext.expandSelectionToItem();
 	return true;
 };

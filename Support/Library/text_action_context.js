@@ -5,6 +5,7 @@
 // MIT License
 
 require.global('mootools-server');
+var Range = require('range').Range;
 
 // TEXT ACTION UTILITIES
 var TextActionContext = new Class({
