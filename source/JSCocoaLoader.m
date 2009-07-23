@@ -141,7 +141,7 @@
 		}
 	} else {
 		// Pass off handling to the Javascript system
-		[jsc evalJSFile:[self findScript:@"system.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
+		[jsc evalJSFile:[self findScript:@"bootstrap_JSCocoaLoader.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
 		
 		// Run the bootstrapping function, which handles all further execution of scripts
 		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_JSCocoaLoader" withArguments:[self script], [self arguments], nil];
