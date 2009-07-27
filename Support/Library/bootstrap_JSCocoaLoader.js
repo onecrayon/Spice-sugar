@@ -59,22 +59,17 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 		// If a global script, eval it and update system.modules
 		if (loadGlobally) {
 			__jsc__.evalJSFile(scriptPath);
-			system.modules[file] = {
-				global: true,
-				path: scriptPath,
-				module: function() {}
-			};
+			system.modules[file] = function() {};
+			system.modules[file].global = true;
+			system.modules[file].path = scriptPath;
 			return true;
 		}
 		// Parse the script as a self-contained function and store in system.modules
-		var module = eval("(function(require,exports,module,system,print){" + JSCocoaLoaderController.read(scriptPath) + "/**/\n})");
-		system.modules[file] = {
-			global: false,
-			path: scriptPath,
-			module: module
-		};
+		system.modules[file] = eval("(function(require,exports,module,system,print){" + JSCocoaLoaderController.read(scriptPath) + "/**/\n})");
+		system.modules[file].global = false;
+		system.modules[file].path = scriptPath;
 		// Evaluate the module
-		var thisModule = {
+		var module = {
 			id: file,
 			path: scriptPath
 		}
@@ -82,7 +77,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 		var print = function(message) {
 			system.print(message);
 		}
-		module(require, exports, thisModule, system, print);
+		system.modules[file](require, exports, module, system, print);
 		// Return the exports object
 		return exports
 	}
@@ -90,7 +85,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 	require.global = function(file, filePaths) {
 		var filePaths = (typeof filePaths !== 'undefined' ? filePaths : null);
 		// Shortcut to do a global load; returns true (loaded/already loaded) or false
-		return require(file, null, true, false);
+		return require(file, filePaths, true, false);
 	}
 	
 	require.force = function(file, filePaths, loadGlobally) {
