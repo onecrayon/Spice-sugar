@@ -67,6 +67,18 @@ var Range = new Class({
 		return secondRange.contains(this);
 	},
 	
+	startLine: function() {
+		return new Range(context.lineRangeForIndex_(this.location));
+	},
+	
+	startLineNumber: function() {
+		return context.lineNumberForIndex_(this.location);
+	},
+	
+	lineRange: function() {
+		return new Range(context.lineRangeForRange_(this.rangeValue()));
+	},
+	
 	log: function() {
 		console.log('range(' + this.location + ',' + this.length + ')');
 	}
