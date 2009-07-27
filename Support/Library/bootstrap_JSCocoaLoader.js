@@ -54,20 +54,21 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 				return false;
 			}
 			// No global issues, so return the evalled code
-			return system.modules[file].module;
-		}
-		// If a global script, eval it and update system.modules
-		if (loadGlobally) {
-			__jsc__.evalJSFile(scriptPath);
-			system.modules[file] = function() {};
-			system.modules[file].global = true;
+			//return system.modules[file].module;
+		} else {
+			// If a global script, eval it and update system.modules
+			if (loadGlobally) {
+				__jsc__.evalJSFile(scriptPath);
+				system.modules[file] = function() {};
+				system.modules[file].global = true;
+				system.modules[file].path = scriptPath;
+				return true;
+			}
+			// Parse the script as a self-contained function and store in system.modules
+			system.modules[file] = eval("(function(require,exports,module,system,print){" + JSCocoaLoaderController.read(scriptPath) + "/**/\n})");
+			system.modules[file].global = false;
 			system.modules[file].path = scriptPath;
-			return true;
 		}
-		// Parse the script as a self-contained function and store in system.modules
-		system.modules[file] = eval("(function(require,exports,module,system,print){" + JSCocoaLoaderController.read(scriptPath) + "/**/\n})");
-		system.modules[file].global = false;
-		system.modules[file].path = scriptPath;
 		// Evaluate the module
 		var module = {
 			id: file,
