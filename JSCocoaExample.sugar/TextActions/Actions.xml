@@ -1,23 +1,35 @@
 <?xml version="1.0"?>
 <action-recipes>
-	<action id="com.yourdomain.action.id" category="category.id">
+	<action id="com.onecrayon.JSCocoa.helloWorld" category="category.id">
+		<!-- Class and title are required by all Espresso menu actions -->
 		<class>JSCocoaLoader</class>
 		<title>Hello World (JSCocoa)</title>
+		
+		<!-- Contents of setup are what's available to the JSCocoaLoader -->
 		<setup>
+			<!-- `script` is the only required attribute of `setup` and should be the name of your Javascript file that's in Support/Scripts ('.js' is optional) -->
 			<script>hello_world</script>
+			
+			<!-- undo_name is a standard argument for custom actions; only useful if you are using text recipes -->
+			<undo_name>Hello World!</undo_name>
+			
+			<!-- Optional; sets in which syntax contexts Espresso will make the action active -->
+			<syntax-context>html *, css *, js *</syntax-context>
+			
+			<!-- `arguments` allows you to pass arbitrary arguments to an action -->
+			<!-- Uses plist formatting for arrays -->
 			<arguments>
 				<array>
 					<string>Hello World${1:, JSCocoa!}</string>
 				</array>
 			</arguments>
-		</setup>
-	</action>
-	<action id="com.yourdomain.action.id2" category="category.id">
-		<class>JSCocoaLoader</class>
-		<title>Select Current Itemizer Item</title>
-		<key-equivalent>command shift b</key-equivalent>
-		<setup>
-			<script>select_current_itemizer_item</script>
+			
+			<!-- The following are optional tags that you'll almost never need to use -->
+			
+			<!-- `function` allows you to specify the name of the function that JSCocoaLoader should call in your script -->
+			<function>main</function>
+			<!-- If `no-frills` is set to 1, then only your script will be executed (without any of JSCocoaLoader's helper functions); refer to the documentation for more info -->
+			<no-frills>0</no-frills>
 		</setup>
 	</action>
 </action-recipes>
