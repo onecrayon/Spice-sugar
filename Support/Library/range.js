@@ -85,7 +85,11 @@ var Range = new Class({
 });
 
 Range.from = function(range){
-	return new Range(range);
+	// Range.from guarantees that you get a range back
+	if ($type(range) !== 'range') {
+		range = new Range(range);
+	}
+	return range;
 };
 
 exports.Range = Range;

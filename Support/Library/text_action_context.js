@@ -20,6 +20,11 @@ var TextActionContext = new Class({
 		context.setSelectedRanges(ranges);
 	},
 	
+	setSelection: function(range) {
+		// Shortcut to set just a single selection
+		this.setSelections([range]);
+	},
+	
 	getSelections: function() {
 		ranges = context.selectedRanges;
 		// return Array.map(ranges, function(range){

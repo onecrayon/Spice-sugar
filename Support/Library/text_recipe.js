@@ -39,32 +39,32 @@ var TextRecipe = new Class({
 			index = rangeOrIndex.location;
 		}
 		this.recipe.addInsertedString_forIndex_(string, index);
+		return this;
 	},
 	
 	replace: function(string, ranges) {
 		ranges = arrayWithRanges(ranges);
 		ranges.each(function(range) {
-			if ($type(range) !== 'range') {
-				range = new Range(range);
-			}
+			range = Range.from(range);
 			this.recipe.addReplacementString_forRange_(string, range.rangeValue());
-		});
+		}, this);
+		return this;
 	},
 	
 	remove: function(ranges) {
 		ranges = arrayWithRanges(ranges);
 		ranges.each(function(range) {
-			if ($type(range) !== 'range') {
-				range = new Range(range);
-			}
+			range = Range.from(range);
 			this.recipe.addDeletedRange_(range.rangeValue());
-		});
+		}, this);
+		return this;
 	},
 	
 	prepare: function() {
 		// Shortcut for preparing the recipe
 		this.prepared = true;
 		this.recipe.prepare;
+		return this;
 	},
 	
 	numberOfChanges: function() {
