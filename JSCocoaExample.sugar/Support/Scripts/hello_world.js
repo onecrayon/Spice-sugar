@@ -7,7 +7,7 @@ var Snippet = require('snippet').Snippet;
       ex.: `<function>my_action</function>` in XML => `exports.my_action = function(){}` here
    
    Any items in your <arguments> array within the XML action definition will be passed
-   as variables here. (So if you had three items in <arguments>, your function would need
+   as arguments here. (So if you had three items in <arguments>, your function would need
    to accept three variables for you to access them.
       ex.:  exports.main = function(var1, var2, var2) {}
 */
