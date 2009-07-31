@@ -80,7 +80,7 @@ var Range = new Class({
 	},
 	
 	log: function() {
-		console.log('range(' + this.location + ',' + this.length + ')');
+		system.log('range(' + this.location + ',' + this.length + ')');
 	}
 });
 

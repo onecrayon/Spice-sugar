@@ -13,7 +13,7 @@ CETextSnippet
 SXSelectorGroup
 */
 
-var TextRecipe = require('text_recipe').TextRecipe;
-var Range = require('range').Range;
-var Snippet = require('snippet').Snippet;
-var textContext = require('text_action_context').textContext;
+exports.TextRecipe = require('text_recipe').TextRecipe;
+exports.Range = require('range').Range;
+exports.Snippet = require('snippet').Snippet;
+exports.textContext = require('text_action_context').textContext;

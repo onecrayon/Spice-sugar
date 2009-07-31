@@ -50,7 +50,7 @@ var Snippet = new Class({
 	},
 	
 	log: function() {
-		console.log(this.text);
+		system.log(this.text);
 	}
 });
 
@@ -67,6 +67,6 @@ String.implement({
 	},
 	
 	log: function() {
-		console.log(String(this));
+		system.log(String(this));
 	}
 });
