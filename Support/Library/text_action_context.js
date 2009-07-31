@@ -47,7 +47,7 @@ var TextActionContext = new Class({
 		this.getSelections().each(function(range) {
 			newRanges.push(this.itemFromRange(range, true).range);
 		}, this);
-		return this.setSelections(newRanges);
+		this.setSelections(newRanges);
 	},
 	
 	// Itemizer functions
