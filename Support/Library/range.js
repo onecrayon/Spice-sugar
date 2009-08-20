@@ -39,6 +39,7 @@ var Range = new Class({
 		}
 		// Sets up a custom entry for $type()
 		this.$family = { name: 'range' };
+		this.limit = this.location + this.length;
 	},
 	
 	rangeValue: function() {

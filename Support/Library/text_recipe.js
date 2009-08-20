@@ -28,15 +28,21 @@ var TextRecipe = new Class({
 		}
 	},
 	
-	insert: function(string, rangeOrIndex) {
+	insert: function(string, rangeOrIndex, insertAfterRange) {
+		// We default to inserting the text at the end of the passed range
+		var insertAfterRange = ($type(insertAfterRange) ? insertAfterRange : true);
 		var index;
-		if ($type(rangeOrIndex) === 'range') {
-			index = rangeOrIndex.location;
-		} else if ($type(rangeOrIndex) === 'number') {
+		if ($type(rangeOrIndex) === 'number') {
 			index = rangeOrIndex;
 		} else {
-			rangeOrIndex = new Range(rangeOrIndex);
-			index = rangeOrIndex.location;
+			if ($type(rangeOrIndex) !== 'range') {
+				rangeOrIndex = new Range(rangeOrIndex);
+			}
+			if (insertAfterRange) {
+				index = rangeOrIndex.limit;
+			} else {
+				index = rangeOrIndex.location;
+			}
 		}
 		this.recipe.addInsertedString_forIndex_(string, index);
 		return this;
