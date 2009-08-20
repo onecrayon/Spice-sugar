@@ -6,6 +6,9 @@
 //     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
 // MIT License
 
+// Setup the globalObject
+var globalObject = this;
+
 // Handles setting up the modular environment
 // Can't be an anonymous function because JSCocoaLoader has to be able to get a return value
 var bootstrap_JSCocoaLoader = function(script, args) {
