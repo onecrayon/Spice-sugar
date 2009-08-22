@@ -74,6 +74,20 @@ var TextActionContext = new Class({
 			return this.getItemParentByRange(range);
 		else
 			return this.getItemByRange(range);
+	},
+	
+	// Utilities for fetching document preferences
+	lineEndingString: function() {
+		return context.textPreferences.lineEndingString;
+	},
+	
+	indentationString: function() {
+		return context.textPreferences.tabString;
+	},
+	
+	xHTMLCloseString: function() {
+		// Uses the self-closing tag string defined by TEA
+		return NSUserDefaults.standardUserDefaults.stringForKey_('TEASelfClosingString');
 	}
 });
 

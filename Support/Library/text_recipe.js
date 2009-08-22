@@ -35,9 +35,13 @@ var TextRecipe = new Class({
 		if ($type(rangeOrIndex) === 'number') {
 			index = rangeOrIndex;
 		} else {
-			if ($type(rangeOrIndex) !== 'range') {
+			// Default to the first range if none explicitly passed
+			if (!$type(rangeOrIndex)) {
+				rangeOrIndex = new Range(context.selectedRanges[0]);
+			} else if ($type(rangeOrIndex) !== 'range') {
 				rangeOrIndex = new Range(rangeOrIndex);
 			}
+			
 			if (insertAfterRange) {
 				index = rangeOrIndex.limit;
 			} else {
