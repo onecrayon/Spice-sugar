@@ -42,6 +42,7 @@ var Range = new Class({
 		this.limit = this.location + this.length;
 	},
 	
+	// Functions to extract NSValue and NSRanges
 	rangeValue: function() {
 		return NSMakeRange(this.location, this.length);
 	},
@@ -50,6 +51,7 @@ var Range = new Class({
 		return NSValue.valueWithRange(this.rangeValue());
 	},
 	
+	// Logical comparisons between ranges
 	equals: function(secondRange) {
 		// Checks if the current range is identical to the passed range
 		var secondRange = new Range(secondRange);
@@ -59,7 +61,7 @@ var Range = new Class({
 	contains: function(secondRange) {
 		// Checks if the current range contains the passed range
 		var secondRange = new Range(secondRange);
-		return this.location <= secondRange.location && ((this.location + this.length) >= (secondRange.location + secondRange.length));
+		return this.location <= secondRange.location && (this.limit >= secondRange.limit);
 	},
 	
 	inside: function(secondRange) {
@@ -68,12 +70,42 @@ var Range = new Class({
 		return secondRange.contains(this);
 	},
 	
+	// Get and check syntax zones
+	getZone: function() {
+		// Find the range's syntax zone and cache it for later use
+		if (!$type(this.zone)) {
+			this.zone = '';
+			if (context.string.length == this.location) {
+				this.zone = context.syntaxTree.rootZone;
+			} else {
+				this.zone = context.syntaxTree.rootZone.zoneAtCharacterIndex_(this.location);
+			}
+		}
+		return this.zone.typeIdentifier;
+	},
+	
+	matchesZone: function(targetSelectors) {
+		var selectors = SXSelectorGroup.selectorGroupWithString_(targetSelectors);
+		// getZone() sets up this.zone and returns the string identifier
+		this.getZone();
+		return selectors.matches_(this.zone);
+	},
+	
+	// Utility functions for working with lines associated with ranges
 	startLine: function() {
 		return new Range(context.lineRangeForIndex_(this.location));
 	},
 	
 	startLineNumber: function() {
 		return context.lineNumberForIndex_(this.location);
+	},
+	
+	endLine: function() {
+		return new Range(context.lineRangeForIndex_(this.limit));
+	},
+	
+	endLineNumber: function() {
+		return context.lineNumberForIndex_(this.limit);
 	},
 	
 	lineRange: function() {
