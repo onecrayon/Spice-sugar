@@ -14,13 +14,13 @@
 			<undo_name>Hello World!</undo_name>
 			
 			<!-- Optional; sets in which syntax contexts Espresso will make the action active -->
-			<syntax-context>html *, css *, js *</syntax-context>
+			<syntax-context>html, html *, css, css *, js, js *</syntax-context>
 			
 			<!-- `arguments` allows you to pass arbitrary arguments to an action -->
 			<!-- Uses plist formatting for arrays -->
 			<arguments>
 				<array>
-					<string>Hello World! Love, Your Pal ${1:Spice}</string>
+					<string>Hello World! Love, ${1:Your Pal Spice}</string>
 				</array>
 			</arguments>
 			
