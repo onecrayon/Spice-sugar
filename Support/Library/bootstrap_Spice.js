@@ -1,4 +1,4 @@
-// The guts of JSCocoaLoader
+// The guts of Spice
 // Sets up the modular environment to enable scripts and helper modules
 //
 // Created by:
@@ -10,11 +10,11 @@
 var globalObject = this;
 
 // Handles setting up the modular environment
-// Can't be an anonymous function because JSCocoaLoader has to be able to get a return value
-var bootstrap_JSCocoaLoader = function(script, args) {
+// Can't be an anonymous function because Spice has to be able to get a return value
+var bootstrap_Spice = function(script, args) {
 	// Setup the logging functions for the universal system object
 	var shim = function(message) {
-		JSCocoaController.log(String(message));
+		SpiceController.log(String(message));
 	};
 	
 	var log = shim;
@@ -43,7 +43,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 		// forceReload allows us to strong-arm the require system into loading a module even if it has already been loaded
 		var forceReload = (typeof forceReload !== 'undefined' ? forceReload : false);
 		// Find the script (should I be looping through the folders in Javascript?)
-		var scriptPath = JSCocoaLoaderController.findScript_inFolders_(file, filePaths);
+		var scriptPath = SpiceController.findScript_inFolders_(file, filePaths);
 		if (scriptPath == null) throw new Error("Cannot find the module '"+file+"'");
 		// Check system.modules to see if this has been loaded before
 		if (Object.prototype.hasOwnProperty.call(system.modules, file) && !forceReload) {
@@ -68,7 +68,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 				return true;
 			}
 			// Parse the script as a self-contained function and store in system.modules
-			system.modules[file] = eval("(function(require,exports,module,system,print){" + JSCocoaLoaderController.read(scriptPath) + "/**/\n})");
+			system.modules[file] = eval("(function(require,exports,module,system,print){" + SpiceController.read(scriptPath) + "/**/\n})");
 			system.modules[file].global = false;
 			system.modules[file].path = scriptPath;
 		}
@@ -103,7 +103,7 @@ var bootstrap_JSCocoaLoader = function(script, args) {
 	// Load with require
 	var mod = require(script, 'Scripts', false);
 	// Check for existence of act, main, or specified target function
-	var target = JSCocoaLoaderController.target;
+	var target = SpiceController.target;
 	if (target === null) {
 		if (Object.prototype.hasOwnProperty.call(mod, 'main')) {
 			target = 'main';
