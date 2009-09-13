@@ -1,16 +1,16 @@
 //
-//  JSCocoaLoader.h
-//  JSCocoaLoader.sugar
+//  Spice.h
+//  Spice.sugar
 //
 //  Created by Ian Beck
-//  http://onecrayon.com
+//  http://onecrayon.com/spice/
 //
 //  MIT License
 
 #import <Cocoa/Cocoa.h>
 
 
-@interface JSCocoaLoader : NSObject {
+@interface Spice : NSObject {
 	// Name of the script to run
 	NSString *script;
 	NSArray *supportPaths;
@@ -24,7 +24,7 @@
 	NSString *syntaxContext;
 	// Bundle path is useful for finding scripts in multiple locations
 	NSString *bundlePath;
-	// Used to bypass JSCocoaLoader's Javascript system and just run the script straight up
+	// Used to bypass Spice's Javascript system and just run the script straight up
 	BOOL noFrills;
 }
 

@@ -7,11 +7,11 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleName</key>
-	<string>JSCocoaLoader</string>
+	<string>Spice</string>
 	<key>CFBundleIconFile</key>
 	<string></string>
 	<key>CFBundleIdentifier</key>
-	<string>com.onecrayon.jscocoaloader</string>
+	<string>com.onecrayon.spice</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -19,8 +19,8 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0b2</string>
+	<string>1.0b3</string>
 	<key>NSPrincipalClass</key>
-	<string>JSCocoaLoader</string>
+	<string>Spice</string>
 </dict>
 </plist>

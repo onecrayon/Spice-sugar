@@ -1,13 +1,13 @@
 //
-//  JSCocoaLoader.m
-//  JSCocoaLoader.sugar
+//  Spice.m
+//  Spice.sugar
 //
 //  Created by Ian Beck
-//  http://onecrayon.com
+//  http://onecrayon.com/spice/
 //
 //  MIT License
 
-#import "JSCocoaLoader.h"
+#import "Spice.h"
 #import <JSCocoa/JSCocoa.h>
 
 #import <EspressoTextActions.h>
@@ -16,7 +16,7 @@
 #import <EspressoSyntaxCore.h>
 
 // This allows us to set private setters for these variables
-@interface JSCocoaLoader ()
+@interface Spice ()
 @property (readwrite,copy) NSString* script;
 @property (readwrite,retain) NSArray* arguments;
 @property (readwrite,copy) NSString* syntaxContext;
@@ -26,7 +26,7 @@
 @end
 
 // The actual implementation of the class
-@implementation JSCocoaLoader
+@implementation Spice
 
 @synthesize script;
 @synthesize supportPaths;
@@ -69,8 +69,8 @@
 		[[self bundlePath] stringByAppendingPathComponent:@"Support"],
 		nil
 	];
-	// This path might need to be searched if we aren't in the JSCocoaLoader bundle
-	NSString *jclPath = [[NSBundle bundleWithIdentifier:@"com.onecrayon.jscocoaloader"] bundlePath];
+	// This path might need to be searched if we aren't in the Spice bundle
+	NSString *jclPath = [[NSBundle bundleWithIdentifier:@"com.onecrayon.spice"] bundlePath];
 	if ([[self bundlePath] compare:jclPath] != NSOrderedSame) {
 		[self setSupportPaths:[default_paths arrayByAddingObject:[jclPath stringByAppendingPathComponent:@"Support"]]];
 	} else {
@@ -96,13 +96,13 @@
 - (BOOL)performActionWithContext:(id)context error:(NSError **)outError
 {
 	if ([self script] == nil) {
-		NSLog(@"JSCocoaLoader Error: Missing script tag in XML");
+		NSLog(@"Spice Error: Missing script tag in XML");
 		return NO;
 	}
 	
 	// Time to initialize JSCocoa
 	JSCocoaController *jsc = [JSCocoa new];
-	[jsc setObject:self	withName:@"JSCocoaLoaderController"];
+	[jsc setObject:self	withName:@"SpiceController"];
 	[jsc setObject:context withName:@"context"];
 	[jsc setObject:[MRRangeSet class] withName:@"MRRangeSet"];
 	[jsc setObject:[CETextRecipe class] withName:@"CETextRecipe"];
@@ -115,7 +115,7 @@
 	if ([self noFrills]) {
 		NSString *path = [self findScript:[self script] inFolders:[NSArray arrayWithObject:@"Scripts"]];
 		if (path == nil) {
-			[self throwAlert:@"Error: could not find script" withMessage:@"JSCocoaLoader could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/Support/lib/" inContext:context];
+			[self throwAlert:@"Error: could not find script" withMessage:@"Spice could not find the script associated with this action. Please contact the action's Sugar developer, or make sure your custom user script is defined here:\n\n~/Library/Application Support/Espresso/Support/Scripts/" inContext:context];
 			return NO;
 		}
 		
@@ -141,10 +141,10 @@
 		}
 	} else {
 		// Pass off handling to the Javascript system
-		[jsc evalJSFile:[self findScript:@"bootstrap_JSCocoaLoader.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
+		[jsc evalJSFile:[self findScript:@"bootstrap_Spice.js" inFolders:[NSArray arrayWithObject:@"Library"]]];
 		
 		// Run the bootstrapping function, which handles all further execution of scripts
-		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_JSCocoaLoader" withArguments:[self script], [self arguments], nil];
+		JSValueRef returnValue = [jsc callJSFunctionNamed:@"bootstrap_Spice" withArguments:[self script], [self arguments], nil];
 		if (![jsc unboxJSValueRef:returnValue]) {
 			result = NO;
 		}
