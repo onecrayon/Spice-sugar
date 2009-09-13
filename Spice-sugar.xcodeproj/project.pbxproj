@@ -290,7 +290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_PATH = /Applications/Espresso.app;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUNDLE_LOADER = "$(APPLICATION_PATH)/Contents/MacOS/Espresso";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = supported;
@@ -298,9 +298,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(APPLICATION_PATH)/Contents/Headers";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = "x86_64 i386 ppc ppc64 ppc7400 ppc970";
 			};
 			name = Debug;
 		};
@@ -308,15 +309,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_PATH = /Applications/Espresso.app;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				BUNDLE_LOADER = "$(APPLICATION_PATH)/Contents/MacOS/Espresso";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_GC = supported;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "$(APPLICATION_PATH)/Contents/Headers";
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
+				VALID_ARCHS = "x86_64 i386 ppc ppc64 ppc7400 ppc970";
 			};
 			name = Release;
 		};
