@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <action-recipes>
-	<action id="com.onecrayon.JSCocoa.helloWorld" category="category.id">
+	<action id="com.onecrayon.spice.helloWorld" category="category.id">
 		<!-- Class and title are required by all Espresso menu actions -->
-		<class>JSCocoaLoader</class>
-		<title>Hello World (JSCocoa)</title>
+		<class>Spice</class>
+		<title>Hello Spicy World</title>
 		
-		<!-- Contents of setup are what's available to the JSCocoaLoader -->
+		<!-- Contents of setup are what's available to the Spice -->
 		<setup>
 			<!-- `script` is the only required attribute of `setup` and should be the name of your Javascript file that's in Support/Scripts ('.js' is optional) -->
 			<script>hello_world</script>
@@ -20,15 +20,15 @@
 			<!-- Uses plist formatting for arrays -->
 			<arguments>
 				<array>
-					<string>Hello World${1:, JSCocoa!}</string>
+					<string>Hello World! Love, Your Pal ${1:Spice}</string>
 				</array>
 			</arguments>
 			
 			<!-- The following are optional tags that you'll almost never need to use -->
 			
-			<!-- `function` allows you to specify the name of the function that JSCocoaLoader should call in your script -->
+			<!-- `function` allows you to specify the name of the function that Spice should call in your script -->
 			<function>main</function>
-			<!-- If `no-frills` is set to 1, then only your script will be executed (without any of JSCocoaLoader's helper functions); refer to the documentation for more info -->
+			<!-- If `no-frills` is set to 1, then only your script will be executed (without any of Spice's helper functions); refer to the documentation for more info -->
 			<no-frills>0</no-frills>
 		</setup>
 	</action>
