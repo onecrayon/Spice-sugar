@@ -9,7 +9,10 @@ require.global('mootools-server');
 var Range = new Class({
 
 	initialize: function(target, length) {
-		if (target && target.rangeValue) {
+		if ($type(target) == 'range') {
+			this.location = target.location;
+			this.length = target.length;
+		} else if (target && target.rangeValue) {
 			// Convert from NSValue
 			var range = target.rangeValue;
 			this.location = range.location;
@@ -49,6 +52,14 @@ var Range = new Class({
 	
 	value: function() {
 		return NSValue.valueWithRange(this.rangeValue());
+	},
+	
+	string: function() {
+		var total_range = new Range(0, context.string.length);
+		if (this.inside(total_range))
+			return context.string.substringWithRange(this.rangeValue());
+		else
+			return false;
 	},
 	
 	// Logical comparisons between ranges
