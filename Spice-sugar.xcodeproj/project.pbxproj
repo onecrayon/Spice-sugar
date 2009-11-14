@@ -157,10 +157,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1DEB913A08733D840010E9CD /* Build configuration list for PBXNativeTarget "Spice.sugar" */;
 			buildPhases = (
+				7AFA3C7F100E333800835DBA /* Copy Frameworks */,
 				8D5B49AF048680CD000E48DA /* Resources */,
 				8D5B49B1048680CD000E48DA /* Sources */,
 				8D5B49B3048680CD000E48DA /* Frameworks */,
-				7AFA3C7F100E333800835DBA /* Copy Frameworks */,
 				7AE86131100A31EA00CEE589 /* Copy Support Folder */,
 			);
 			buildRules = (
