@@ -50,6 +50,22 @@ var TextActionContext = new Class({
 		this.setSelections(newRanges);
 	},
 	
+	// Working with lines
+	lineNumber: function(atIndex) {
+		if ($type(atIndex) !== 'number')
+			var atIndex = this.getFirstSelection().location;
+		return context.lineStorage.lineNumberForIndex(atIndex);
+	},
+	
+	rangeForLine: function(lineNumber) {
+		if ($type(lineNumber) !== 'number')
+			var lineNumber = this.lineNumber();
+		if (context.lineStorage.containsIndex(lineNumber))
+			return context.lineStorage.lineRangeForLineNumber(lineNumber);
+		else
+			return false;
+	},
+	
 	// Itemizer functions
 	getItemByRange: function(range) {
 		if ($type(range) !== 'range')
