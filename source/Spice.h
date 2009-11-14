@@ -38,6 +38,7 @@
 @property (copy) NSString* target;
 @property (retain) NSArray* supportPaths;
 
+- (void)log:(NSString *)message;
 - (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders;
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
 - (BOOL)isFile:(NSString *)path;

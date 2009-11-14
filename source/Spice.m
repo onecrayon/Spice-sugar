@@ -102,6 +102,7 @@
 	
 	// Time to initialize JSCocoa
 	JSCocoaController *jsc = [JSCocoa new];
+	[jsc setUseJSLint:NO];
 	[jsc setObject:self	withName:@"SpiceController"];
 	[jsc setObject:context withName:@"context"];
 	[jsc setObject:[MRRangeSet class] withName:@"MRRangeSet"];
@@ -154,6 +155,11 @@
 	
 	// Return control to Espresso
 	return result;
+}
+
+// Currently just a shortcut to NSLog
+- (void)log:(NSString *)message {
+	NSLog(@"%@", message);
 }
 
 - (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders {
