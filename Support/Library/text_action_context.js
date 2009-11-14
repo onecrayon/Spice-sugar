@@ -60,8 +60,8 @@ var TextActionContext = new Class({
 	rangeForLine: function(lineNumber) {
 		if ($type(lineNumber) !== 'number')
 			var lineNumber = this.lineNumber();
-		if (context.lineStorage.containsIndex(lineNumber))
-			return context.lineStorage.lineRangeForLineNumber(lineNumber);
+		if (lineNumber >= context.lineStorage.firstIndex && lineNumber <= context.lineStorage.lastIndex)
+			return new Range(context.lineStorage.lineRangeForLineNumber(lineNumber));
 		else
 			return false;
 	},
