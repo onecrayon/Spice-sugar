@@ -23,8 +23,10 @@ var TextRecipe = new Class({
 	initialize: function(undo_name) {
 		this.prepared = false;
 		this.recipe = CETextRecipe.textRecipe;
-		if ($type(undo_name) === 'string') {
+		if ($type(undo_name) == 'string') {
 			this.recipe.undoActionName = undo_name;
+		} else if (SpiceController.undoName !== null) {
+			this.recipe.undoActionName = SpiceController.undoName;
 		}
 	},
 	
