@@ -224,7 +224,6 @@
 	[self setSyntaxContext:nil];
 	[self setBundlePath:nil];
 	[self setTarget:nil];
-	[self setNoFrills:nil];
 	[super dealloc];
 }
 
