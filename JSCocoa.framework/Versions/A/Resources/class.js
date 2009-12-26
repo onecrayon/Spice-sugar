@@ -257,7 +257,7 @@
 	function	class_add_key(newClass, name, getter, setter)
 	{
 		// Get
-		var fn = new Function('return this.JSValueForJSName("' + name + '")')
+		var fn = new Function('return this.JSValueForJSName("_' + name + '")')
 		if (getter)	
 		{
 			if (typeof getter != 'function')	throw 'key getter not a function (' + getter + ')'
@@ -268,7 +268,7 @@
 		// Set
 		var setMethod = 'set' + name.substr(0, 1).toUpperCase() + name.substr(1) + ':'
 //		var fn = new Function('v', 'this.set({jsValue:v, forJsName : "' + name + '"})')
-		var fn = new Function('outlet', 'this.setJSValue_forJSName(v, "_' + name + '")')
+		var fn = new Function('outlet', 'this.setJSValue_forJSName(outlet, "_' + name + '")')
 		if (setter)	
 		{
 			if (typeof setter != 'function')	throw 'key setter not a function (' + setter + ')'
@@ -747,7 +747,6 @@
 		var lines	= script.split('\n')
 		var options	= { forin : true, laxbreak : true, indent : true, evil : true }
 		var lintRes	= __jslint(lines, options)
-		
 		var str = 'LINT=' + lintRes
 		for (var i=0; i<__JSLINT.errors.length; i++)
 		{
@@ -760,12 +759,14 @@
 			str += '^'
 			log(str)
 		}
+		var useAutoCall = __jsc__.useAutoCall
+		if (typeof useAutoCall === 'function') useAutoCall = __jsc__.useAutoCall()
 
 
 		var tokens = __lintTokens
-		var str = ''
+
+		var str	= ''
 		var str2 = ''
-		
 		var currentParameterCount
 		var tokenStream		= []
 		var token, prevtoken= tokens[0]
@@ -792,7 +793,6 @@
 			// Handle shortcut function token
 			if (token.value == 'ƒ')
 			{
-//					alert(dumpHashNoFunction(token) + '\n************\n' + dumpHashNoFunction(prevtoken))
 				token.rawValue = 'function'
 				
 				// Add parens if they're missing
@@ -807,7 +807,7 @@
 			// Handle ObjC classes
 			if (token.isObjCClassStart)
 			{
-				if (tokens[i+2].value == '<')
+				if (tokens[i+2].value == '<' || tokens[i+2].value == ':')
 				{
 					tokenStream.push("Class('" + tokens[i+1].value + ' < ' + tokens[i+3].value + "').definition = function ()")
 					i += 3
@@ -817,6 +817,31 @@
 					tokenStream.push("Class('" + tokens[i+1].value + "').definition = function ()")
 					i += 1
 				}
+				if (token.value == 'implementation')	tokenStream.push('{\n')
+				continue
+			}
+			// Class var list @implementation Class : ParentClass { var list }
+			if (token.isObjCVarList)
+			{
+				while (token && token.value != '}')
+				{
+					i++
+					token = tokens[i]
+					if (!token)	return false
+				}
+				i++
+				continue
+			}
+			// Class category
+			if (token.isObjCCategory)
+			{
+				while (token && token.value != ')')
+				{
+					i++
+					token = tokens[i]
+					if (!token)	return false
+				}
+				i++
 				continue
 			}
 			// Handle ObjC methods
@@ -892,6 +917,14 @@
 			// String immediates, selectors
 			if (token.id == '@')
 			{
+				if (tokens[i+1].value == 'implementation')	continue
+				if (tokens[i+1].value == 'end')	
+				{
+					i++
+					tokenStream.push('}\n')
+					continue
+				}
+				
 				var nexttoken = tokens[i+1]
 				if (nexttoken.id == '(string)')
 				{
@@ -931,7 +964,6 @@
 
 				// Splice : delete index, delete item count, replacement
 				var r = tokens.splice(i, ifReturnOpenerIndex-returnOpenerIndex-1)
-//					token.rawValue = '<b style="background-color: lime">' + token.rawValue + '</b>'
 
 				// Push delete item count and delete index on top of replacing tokens
 				r.unshift(0)
@@ -954,18 +986,25 @@
 			// Instance : add '.' to get method
 			if (token.isObjCFirstCall)
 			{
+				if (token.isObjCSuperCall)	v = 'this.' + (token.value=='super'?'Super':'Original') + '(arguments, '
 				currentParameterCount = token.objCParameterCountOpener
 				// Special case for 'class', must be bracketed ['class']
-				if (tokens[i+1].rawValue != 'class')
+				if (tokens[i+1].rawValue != 'class' && !token.isObjCSuperCall)
 					v += '.'
 			}
 			// Special case for class
 			if (token.isObjCCall && token.rawValue == 'class')	v = "['class']"
 			// First selector part : retrieve full selector name
-			if (token.isObjCFirstParam && currentParameterCount)
+			if (token.isObjCFirstParam)
 			{
-				v = token.objCJSSelector
-				v += '('
+				if (currentParameterCount)
+				{
+					v = token.objCJSSelector
+					if (token.isObjCSuperCall)	v = "'" + v.replace(/_/g, ':') + "', new Array"
+					v += '('
+				}
+				else
+					if (!useAutoCall)	v += '()'
 			}
 			// Selector part : ignore name and add ',' separator
 			if (token.isObjCMultiCall)
@@ -981,12 +1020,14 @@
 					v = ''
 				if (token.objCParameterCountCloser)
 					v = ')' + (v||'')
+				if (token.isObjCSuperCall) v += ')'
 			}
 			tokenStream.push(v)
 		}
 		var transformed = tokenStream.join('')
 //		log('*************')
 //		log(transformed)
+//		log('****' + script + '->' + transformed)
 		return	transformed
 	}
 
