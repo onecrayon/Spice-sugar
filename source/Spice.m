@@ -216,4 +216,16 @@
 	return [NSString stringWithContentsOfFile:path];
 }
 
+- (void)dealloc {
+	[self setScript:nil];
+	[self setSupportPaths:nil];
+	[self setArguments:nil];
+	[self setUndoName:nil];
+	[self setSyntaxContext:nil];
+	[self setBundlePath:nil];
+	[self setTarget:nil];
+	[self setNoFrills:nil];
+	[super dealloc];
+}
+
 @end
