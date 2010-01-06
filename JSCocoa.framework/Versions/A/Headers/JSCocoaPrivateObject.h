@@ -47,6 +47,12 @@
 	
 	JSValueRef	jsValue;
 	JSContextRef	ctx;
+	// (test) when storing JSValues from a WebView, used to retain the WebView's context.
+	// Disabled for now. Just make sure the WebView has a longer life than the vars
+	// it's using.
+	//
+	// Disabled because retaining the context crashes in 32 bits, but works in 64 bit.
+	// May be reenabled someday.
 //	JSContextGroupRef	contextGroup;
 	
 	BOOL		isAutoCall;
