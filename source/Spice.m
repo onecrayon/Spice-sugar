@@ -109,6 +109,7 @@
 	[jsc setObject:[CETextRecipe class] withName:@"CETextRecipe"];
 	[jsc setObject:[CETextSnippet class] withName:@"CETextSnippet"];
 	[jsc setObject:[SXSelectorGroup class] withName:@"SXSelectorGroup"];
+	[jsc setObject:[SXTypeIdentifier class] withName:@"SXTypeIdentifier"];
 	
 	BOOL result = YES;
 	
@@ -150,8 +151,6 @@
 			result = NO;
 		}
 	}
-	
-	// TODO: verify that no explicit garbage collection of jsc is necessary
 	
 	// Return control to Espresso
 	return result;
