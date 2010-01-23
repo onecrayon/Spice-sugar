@@ -1,24 +1,28 @@
 /*
-Script: Core.js
-	MooTools - My Object Oriented JavaScript Tools.
+---
 
-License:
-	MIT-style license.
+script: Core.js
 
-Copyright:
-	Copyright (c) 2006-2008 [Valerio Proietti](http://mad4milk.net/).
+description: The core of MooTools, contains all the base functions and the Native and Hash implementations. Required by all the other scripts.
 
-Code & Documentation:
-	[The MooTools production team](http://mootools.net/developers/).
+license: MIT-style license.
 
-Inspiration:
-	- Class implementation inspired by [Base.js](http://dean.edwards.name/weblog/2006/03/base/) Copyright (c) 2006 Dean Edwards, [GNU Lesser General Public License](http://opensource.org/licenses/lgpl-license.php)
-	- Some functionality inspired by [Prototype.js](http://prototypejs.org) Copyright (c) 2005-2007 Sam Stephenson, [MIT License](http://opensource.org/licenses/mit-license.php)
+copyright: Copyright (c) 2006-2008 [Valerio Proietti](http://mad4milk.net/).
+
+authors: The MooTools production team (http://mootools.net/developers/)
+
+inspiration:
+- Class implementation inspired by [Base.js](http://dean.edwards.name/weblog/2006/03/base/) Copyright (c) 2006 Dean Edwards, [GNU Lesser General Public License](http://opensource.org/licenses/lgpl-license.php)
+- Some functionality inspired by [Prototype.js](http://prototypejs.org) Copyright (c) 2005-2007 Sam Stephenson, [MIT License](http://opensource.org/licenses/mit-license.php)
+
+provides: [Mootools, Native, Hash.base, Array.each, $util]
+
+...
 */
 
 var MooTools = {
-	'version': '1.2.3',
-	'build': '4980aa0fb74d2f6eb80bcd9f5b8e1fd6fbb8f607'
+	'version': '1.2.4',
+	'build': '0d9113241a90b9cd5643b926795852a2026710d4'
 };
 
 var Native = function(options){
@@ -288,11 +292,21 @@ function $unlink(object){
 
 
 /*
-Script: Array.js
-	Contains Array Prototypes like each, contains, and erase.
+---
 
-License:
-	MIT-style license.
+script: Array.js
+
+description: Contains Array Prototypes like each, contains, and erase.
+
+license: MIT-style license.
+
+requires:
+- /$util
+- /Array.each
+
+provides: [Array]
+
+...
 */
 
 Array.implement({
@@ -312,7 +326,7 @@ Array.implement({
 		return results;
 	},
 
-	clean: function() {
+	clean: function(){
 		return this.filter($defined);
 	},
 
@@ -430,11 +444,21 @@ Array.implement({
 
 
 /*
-Script: Function.js
-	Contains Function Prototypes like create, bind, pass, and delay.
+---
 
-License:
-	MIT-style license.
+script: Function.js
+
+description: Contains Function Prototypes like create, bind, pass, and delay.
+
+license: MIT-style license.
+
+requires:
+- /Native
+- /$util
+
+provides: [Function]
+
+...
 */
 
 Function.implement({
@@ -493,11 +517,21 @@ Function.implement({
 
 
 /*
-Script: Number.js
-	Contains Number Prototypes like limit, round, times, and ceil.
+---
 
-License:
-	MIT-style license.
+script: Number.js
+
+description: Contains Number Prototypes like limit, round, times, and ceil.
+
+license: MIT-style license.
+
+requires:
+- /Native
+- /$util
+
+provides: [Number]
+
+...
 */
 
 Number.implement({
@@ -539,11 +573,20 @@ Number.alias('times', 'each');
 
 
 /*
-Script: String.js
-	Contains String Prototypes like camelCase, capitalize, test, and toInt.
+---
 
-License:
-	MIT-style license.
+script: String.js
+
+description: Contains String Prototypes like camelCase, capitalize, test, and toInt.
+
+license: MIT-style license.
+
+requires:
+- /Native
+
+provides: [String]
+
+...
 */
 
 String.implement({
@@ -626,11 +669,20 @@ String.implement({
 
 
 /*
-Script: Hash.js
-	Contains Hash Prototypes. Provides a means for overcoming the JavaScript practical impossibility of extending native Objects.
+---
 
-License:
-	MIT-style license.
+script: Hash.js
+
+description: Contains Hash Prototypes. Provides a means for overcoming the JavaScript practical impossibility of extending native Objects.
+
+license: MIT-style license.
+
+requires:
+- /Hash.base
+
+provides: [Hash]
+
+...
 */
 
 Hash.implement({
@@ -762,11 +814,26 @@ Hash.alias({keyOf: 'indexOf', hasValue: 'contains'});
 
 
 /*
-Script: Class.js
-	Contains the Class Function for easily creating, extending, and implementing reusable Classes.
+---
 
-License:
-	MIT-style license.
+script: Class.js
+
+description: Contains the Class Function for easily creating, extending, and implementing reusable Classes.
+
+license: MIT-style license.
+
+requires:
+- /$util
+- /Native
+- /Array
+- /String
+- /Function
+- /Number
+- /Hash
+
+provides: [Class]
+
+...
 */
 
 function Class(params){
@@ -916,11 +983,20 @@ Class.Mutators = {
 
 
 /*
-Script: Class.Extras.js
-	Contains Utility Classes that can be implemented into your own Classes to ease the execution of many common tasks.
+---
 
-License:
-	MIT-style license.
+script: Class.Extras.js
+
+description: Contains Utility Classes that can be implemented into your own Classes to ease the execution of many common tasks.
+
+license: MIT-style license.
+
+requires:
+- /Class
+
+provides: [Chain, Events, Options]
+
+...
 */
 
 var Chain = new Class({
@@ -996,7 +1072,7 @@ var Events = new Class({
 });
 
 Events.removeOn = function(string){
-	return string.replace(/^on([A-Z])/, function(full, first) {
+	return string.replace(/^on([A-Z])/, function(full, first){
 		return first.toLowerCase();
 	});
 };
@@ -1016,22 +1092,54 @@ var Options = new Class({
 
 });
 
-
 //MooTools More, <http://mootools.net/more>. Copyright (c) 2006-2009 Aaron Newton <http://clientcide.com/>, Valerio Proietti <http://mad4milk.net> & the MooTools team <http://mootools.net/developers>, MIT Style License.
 
+/*
+---
+
+script: More.js
+
+description: MooTools More
+
+license: MIT-style license
+
+authors:
+- Guillermo Rauch
+- Thomas Aylott
+- Scott Kyle
+
+requires:
+- core:1.2.4/MooTools
+
+provides: [MooTools.More]
+
+...
+*/
+
 MooTools.More = {
-	'version': '1.2.3.1'
+	'version': '1.2.4.2',
+	'build': 'bd5a93c0913cce25917c48cbdacde568e15e02ef'
 };
 
 /*
-Script: Class.Refactor.js
-	Extends a class onto itself with new property, preserving any items attached to the class's namespace.
+---
 
-	License:
-		MIT-style license.
+script: Class.Refactor.js
 
-	Authors:
-		Aaron Newton
+description: Extends a class onto itself with new property, preserving any items attached to the class's namespace.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Class
+- /MooTools.More
+
+provides: [Class.refactor]
+
+...
 */
 
 Class.refactor = function(original, refactors){
@@ -1052,14 +1160,24 @@ Class.refactor = function(original, refactors){
 };
 
 /*
-Script: Class.Binds.js
-	Automagically binds specified methods in a class to the instance of the class.
+---
 
-	License:
-		MIT-style license.
+script: Class.Binds.js
 
-	Authors:
-		Aaron Newton
+description: Automagically binds specified methods in a class to the instance of the class.
+
+license: MIT-style license
+
+authors:
+- Aaron Newton
+
+requires:
+- core:1.2.4/Class
+- /MooTools.More
+
+provides: [Class.Binds]
+
+...
 */
 
 Class.Mutators.Binds = function(binds){
@@ -1076,15 +1194,27 @@ Class.Mutators.initialize = function(initialize){
 	};
 };
 
+
 /*
-Script: Class.Occlude.js
-	Prevents a class from being applied to a DOM element twice.
+---
 
-	License:
-		MIT-style license.
+script: Class.Occlude.js
 
-	Authors:
-		Aaron Newton
+description: Prevents a class from being applied to a DOM element twice.
+
+license: MIT-style license.
+
+authors:
+- Aaron Newton
+
+requires: 
+- core/1.2.4/Class
+- core:1.2.4/Element
+- /MooTools.More
+
+provides: [Class.Occlude]
+
+...
 */
 
 Class.Occlude = new Class({
@@ -1092,12 +1222,11 @@ Class.Occlude = new Class({
 	occlude: function(property, element){
 		element = document.id(element || this.element);
 		var instance = element.retrieve(property || this.property);
-		if (instance && !$defined(this.occluded)){
-			this.occluded = instance;
-		} else {
-			this.occluded = false;
-			element.store(property || this.property, this);
-		}
+		if (instance && !$defined(this.occluded))
+			return this.occluded = instance;
+
+		this.occluded = false;
+		element.store(property || this.property, this);
 		return this.occluded;
 	}
 
