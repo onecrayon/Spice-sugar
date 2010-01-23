@@ -21,9 +21,9 @@ var SyntaxZone = require('syntax_zone').SyntaxZone;
 
 var Range = new Class({
 	// Public properties
-	location = 0,
-	length = 0,
-	limit = 0,
+	location: 0,
+	length: 0,
+	limit: 0,
 
 	initialize: function(target, length) {
 		if ($type(target) == 'range') {
@@ -111,7 +111,7 @@ var Range = new Class({
 		// Shortcut to check if the range matches a zone selector string
 		var zone = this.getZone();
 		return zone.matches(targetSelectors);
-	}
+	},
 	
 	// Utility functions for working with lines associated with ranges
 	startLine: function() {

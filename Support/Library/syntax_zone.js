@@ -21,9 +21,9 @@ var Range = require('range').Range;
 
 var SyntaxZone = new Class({
 	// Public properties
-	id = '', // String value of the zone's type identifier
-	range = null,
-	sxzone = null, // The actual SXZone object
+	id: '', // String value of the zone's type identifier
+	range: null,
+	sxzone: null, // The actual SXZone object
 	
 	initialize: function(rangeOrIndex) {
 		if ($type(rangeOrIndex) == 'syntaxzone') {
@@ -45,7 +45,7 @@ var SyntaxZone = new Class({
 		}
 		
 		// Set up custom entry for $type()
-		this.$family: { name: 'syntaxzone' };
+		this.$family = { name: 'syntaxzone' };
 		
 		// Set up some data for easy access
 		if (this.sxzone.typeIdentifier)
@@ -65,7 +65,7 @@ var SyntaxZone = new Class({
 	
 	// Syntax tree methods
 	parent: function() {
-		if ($chk(this.sxzone.parent)
+		if ($chk(this.sxzone.parent))
 			return new SyntaxZone(this.sxzone.parent);
 		else
 			return null;
