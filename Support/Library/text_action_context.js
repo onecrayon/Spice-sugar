@@ -1,8 +1,21 @@
-// Convenience method for working with the context for TextActions
-// Created by:
-//     Ian Beck / OneCrayon -- http://onecrayon.com/
-//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
-// MIT License
+/*
+---
+
+script: text_action_context.js
+
+description: Convenience class and object for working with context for TextActions
+
+license: MIT license.
+
+authors:
+- Ian Beck
+
+exports:
+- TextActionContext (class)
+- textContext (object)
+
+...
+*/
 
 require.global('mootools-server');
 var Range = require('range').Range;
@@ -13,7 +26,7 @@ var TextActionContext = new Class({
 	// Selection functions
 	setSelections: function(ranges) {
 		ranges = Array.prototype.map.call(ranges, function(range){
-			if ($type(range) !== 'range')
+			if ($type(range) != 'range')
 				var range = new Range(range);
 			return range.value();
 		});
@@ -52,13 +65,13 @@ var TextActionContext = new Class({
 	
 	// Working with lines
 	lineNumber: function(atIndex) {
-		if ($type(atIndex) !== 'number')
+		if ($type(atIndex) != 'number')
 			var atIndex = this.getFirstSelection().location;
 		return context.lineStorage.lineNumberForIndex(atIndex);
 	},
 	
 	rangeForLine: function(lineNumber) {
-		if ($type(lineNumber) !== 'number')
+		if ($type(lineNumber) != 'number')
 			var lineNumber = this.lineNumber();
 		if (lineNumber >= 1 && lineNumber <= context.lineStorage.count)
 			return new Range(context.lineStorage.lineRangeForLineNumber(lineNumber));
@@ -68,7 +81,7 @@ var TextActionContext = new Class({
 	
 	// Itemizer functions
 	getItemByRange: function(range) {
-		if ($type(range) !== 'range')
+		if ($type(range) != 'range')
 			var range = new Range(range);
 		return context.itemizer.smallestItemContainingCharacterRange(range.rangeValue());
 	},

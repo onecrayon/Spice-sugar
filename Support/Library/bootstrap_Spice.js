@@ -1,10 +1,20 @@
-// The guts of Spice
-// Sets up the modular environment to enable scripts and helper modules
-//
-// Created by:
-//     Ian Beck / OneCrayon -- http://onecrayon.com/
-//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
-// MIT License
+/*
+---
+
+script: bootstrap_Spice.js
+
+description: Internal function for bootstrapping the modular environment.
+             DO NOT OVERRIDE OR MODIFY. This is the keystone to running
+             any Spice module.
+
+license: MIT license.
+
+authors:
+- Ian Beck
+- Thomas Aylott
+
+...
+*/
 
 // Setup the globalObject
 var globalObject = this;
@@ -30,18 +40,18 @@ var bootstrap_Spice = function(script, args) {
 	// `file` is the only required variable
 	var require = function(file, filePaths, loadGlobally, forceReload) {
 		// filePaths is an optional array or string of paths to search within the support folders
-		var filePaths = (typeof filePaths !== 'undefined' ? filePaths : null);
+		var filePaths = (typeof filePaths != 'undefined' ? filePaths : null);
 		// If a single file path was passed, convert it to a single element array
-		if (typeof filePaths === 'string') {
+		if (typeof filePaths == 'string') {
 			filePaths = [filePaths];
 		} else if (filePaths === null) {
 			filePaths = ['Library'];
 		}
 		// loadGlobally allows bypassing the exports system and just loading a script into the global workspace; necessary for things like Mootools
 		// A script that has been loaded globally will never be reloaded; once loaded, everyone can access it
-		var loadGlobally = (typeof loadGlobally !== 'undefined' ? loadGlobally : false);
+		var loadGlobally = (typeof loadGlobally != 'undefined' ? loadGlobally : false);
 		// forceReload allows us to strong-arm the require system into loading a module even if it has already been loaded
-		var forceReload = (typeof forceReload !== 'undefined' ? forceReload : false);
+		var forceReload = (typeof forceReload != 'undefined' ? forceReload : false);
 		// Find the script (should I be looping through the folders in Javascript?)
 		var scriptPath = SpiceController.findScript_inFolders_(file, filePaths);
 		if (scriptPath == null) throw new Error("Cannot find the module '"+file+"'");

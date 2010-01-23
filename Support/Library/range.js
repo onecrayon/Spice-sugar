@@ -1,12 +1,29 @@
-// Class for creating, comparing, and otherwise handling text ranges
-// Created by:
-//     Ian Beck / OneCrayon -- http://onecrayon.com/
-//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
-// MIT License
+/*
+---
+
+script: range.js
+
+description: Class for creating, comparing, and otherwise handling ranges of text
+
+license: MIT license.
+
+authors:
+- Ian Beck
+
+exports:
+- Range (class)
+
+...
+*/
 
 require.global('mootools-server');
+var SyntaxZone = require('syntax_zone').SyntaxZone;
 
 var Range = new Class({
+	// Public properties
+	location = 0,
+	length = 0,
+	limit = 0,
 
 	initialize: function(target, length) {
 		if ($type(target) == 'range') {
@@ -18,17 +35,17 @@ var Range = new Class({
 			this.location = range.location;
 			this.length = range.length;
 			
-		} else if (target && $type(target.location) === 'number' && $type(target.length) === 'number') {
+		} else if (target && $type(target.location) == 'number' && $type(target.length) == 'number') {
 			// Convert from NSRange or Range
 			this.location = target.location;
 			this.length = target.length;
 			
-		} else if ($type(target) === 'array') {
+		} else if ($type(target) == 'array') {
 			// Convert from array
 			this.location = target[0];
 			this.length = target[1];
 			
-		} else if ($type(target) === 'number' && $type(length) === 'number') {
+		} else if ($type(target) == 'number' && $type(length) == 'number') {
 			this.location = target;
 			this.length = length;
 			
@@ -83,24 +100,18 @@ var Range = new Class({
 	
 	// Get and check syntax zones
 	getZone: function() {
-		// Find the range's syntax zone and cache it for later use
-		if (!$type(this.zone)) {
-			this.zone = '';
-			if (context.string.length == this.location) {
-				this.zone = context.syntaxTree.rootZone;
-			} else {
-				this.zone = context.syntaxTree.rootZone.zoneAtCharacterIndex_(this.location);
-			}
+		// Find the range's syntax zone, cache it for later use, and return the SyntaxZone object
+		if (!$chk(this._zone)) {
+			this._zone = new SyntaxZone(this);
 		}
-		return this.zone.typeIdentifier;
+		return this._zone;
 	},
 	
 	matchesZone: function(targetSelectors) {
-		var selectors = SXSelectorGroup.selectorGroupWithString_(targetSelectors);
-		// getZone() sets up this.zone and returns the string identifier
-		this.getZone();
-		return selectors.matches_(this.zone);
-	},
+		// Shortcut to check if the range matches a zone selector string
+		var zone = this.getZone();
+		return zone.matches(targetSelectors);
+	}
 	
 	// Utility functions for working with lines associated with ranges
 	startLine: function() {
@@ -130,7 +141,7 @@ var Range = new Class({
 
 Range.from = function(range){
 	// Range.from guarantees that you get a range back
-	if ($type(range) !== 'range') {
+	if ($type(range) != 'range') {
 		range = new Range(range);
 	}
 	return range;

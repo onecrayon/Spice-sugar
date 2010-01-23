@@ -1,3 +1,5 @@
+// DEPRECATED; will likely be removed in the very near future
+
 // Generic Cocoa helper objects =================================
 
 // Is this necessary anymore now that we've got system.print and system.log (with all its variations)?

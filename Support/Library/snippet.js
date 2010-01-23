@@ -1,8 +1,25 @@
-// Utility methods for working with Espresso text snippets
-// Created by:
-//     Ian Beck / OneCrayon -- http://onecrayon.com/
-//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
-// MIT License
+/*
+---
+
+script: snippet.js
+
+description: Utility class for working with Espresso text snippets
+
+license: MIT license.
+
+authors:
+- Ian Beck
+
+exports:
+- Snippet (class)
+
+provides:
+- String.toSnippet()
+- String.sanitizedForSnippet()
+- String.log()
+
+...
+*/
 
 require.global('mootools-server');
 var textContext = require('text_action_context').textContext;
@@ -11,6 +28,8 @@ var Range = require('range').Range;
 
 // SNIPPET UTILITIES
 var Snippet = new Class({
+	// Public properties
+	text: '',
 	
 	initialize: function(text) {
 		this.text = text;

@@ -1,10 +1,20 @@
-// Class for creating and executing text recipes
-// Sets up the modular environment to enable scripts and helper modules
-//
-// Created by:
-//     Ian Beck / OneCrayon -- http://onecrayon.com/
-//     Thomas Aylott / SubtleGradient -- http://subtlegradient.com/
-// MIT License
+/*
+---
+
+script: text_recipe.js
+
+description: Class for creating and executing text recipes
+
+license: MIT license.
+
+authors:
+- Ian Beck
+
+exports:
+- TextRecipe (class)
+
+...
+*/
 
 require.global('mootools-server');
 var Range = require('range').Range;
@@ -13,7 +23,7 @@ function arrayWithRanges(ranges) {
 	// Utility function for converting a single range into an array of ranges
 	// Where does this belong? Stuck it here because it was where I was using it,
 	// but should probably go somewhere more useful and be required in
-	if ($type(ranges) !== 'array') {
+	if ($type(ranges) != 'array') {
 		ranges = [ranges];
 	}
 	return ranges;
@@ -34,13 +44,13 @@ var TextRecipe = new Class({
 		// We default to inserting the text at the end of the passed range
 		var insertAfterRange = ($type(insertAfterRange) ? insertAfterRange : true);
 		var index;
-		if ($type(rangeOrIndex) === 'number') {
+		if ($type(rangeOrIndex) == 'number') {
 			index = rangeOrIndex;
 		} else {
 			// Default to the first range if none explicitly passed
 			if (!$type(rangeOrIndex)) {
 				rangeOrIndex = new Range(context.selectedRanges[0]);
-			} else if ($type(rangeOrIndex) !== 'range') {
+			} else if ($type(rangeOrIndex) != 'range') {
 				rangeOrIndex = new Range(rangeOrIndex);
 			}
 			
