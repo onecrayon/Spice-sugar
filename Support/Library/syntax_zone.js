@@ -13,6 +13,10 @@ authors:
 exports:
 - SyntaxZone (class)
 
+provides:
+- Range.getZone()
+- Range.matches(targetSelectors)
+
 ...
 */
 
@@ -131,5 +135,22 @@ SyntaxZone.from = function(target){
 	}
 	return target;
 };
+
+// Range shortcuts for dealing with syntax zones
+Range.implement({
+	getZone: function() {
+		// Find the range's syntax zone, cache it for later use, and return the SyntaxZone object
+		if (!$chk(this._zone)) {
+			this._zone = new SyntaxZone(this);
+		}
+		return this._zone;
+	},
+	
+	matchesZone: function(targetSelectors) {
+		// Shortcut to check if the range matches a zone selector string
+		var zone = this.getZone();
+		return zone.matches(targetSelectors);
+	}
+});
 
 exports.SyntaxZone = SyntaxZone;

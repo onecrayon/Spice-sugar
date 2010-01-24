@@ -17,7 +17,6 @@ exports:
 */
 
 require.global('mootools-server');
-var SyntaxZone = require('syntax_zone').SyntaxZone;
 
 var Range = new Class({
 	// Public properties
@@ -54,8 +53,8 @@ var Range = new Class({
 			if (!$type(target)) this.location = 0;
 			else this.location = target;
 			
-			if (!$type(location)) this.location = 0;
-			else this.location = location;
+			if (!$type(length)) this.length = 0;
+			else this.length = length;
 		}
 		// Sets up a custom entry for $type()
 		this.$family = { name: 'range' };
@@ -96,21 +95,6 @@ var Range = new Class({
 		// Checks if the current range is contained by the passed range
 		var secondRange = new Range(secondRange);
 		return secondRange.contains(this);
-	},
-	
-	// Get and check syntax zones
-	getZone: function() {
-		// Find the range's syntax zone, cache it for later use, and return the SyntaxZone object
-		if (!$chk(this._zone)) {
-			this._zone = new SyntaxZone(this);
-		}
-		return this._zone;
-	},
-	
-	matchesZone: function(targetSelectors) {
-		// Shortcut to check if the range matches a zone selector string
-		var zone = this.getZone();
-		return zone.matches(targetSelectors);
 	},
 	
 	// Utility functions for working with lines associated with ranges
