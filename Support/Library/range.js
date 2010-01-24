@@ -9,6 +9,7 @@ license: MIT license.
 
 authors:
 - Ian Beck
+- Thomas Aylott
 
 exports:
 - Range (class)
