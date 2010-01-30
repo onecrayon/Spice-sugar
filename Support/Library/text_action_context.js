@@ -121,5 +121,15 @@ var TextActionContext = new Class({
 	}
 });
 
-exports.textContext = new TextActionContext();
+var textContext = new TextActionContext();
+
+// Range shortcuts for dealing with selections
+Range.implement({
+	select: function() {
+		// Shortcut to select a range
+		textContext.setSelection(this);
+	}
+});
+
+exports.textContext = textContext;
 exports.TextActionContext = TextActionContext;
