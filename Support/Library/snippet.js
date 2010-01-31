@@ -44,10 +44,10 @@ var Snippet = new Class({
 		var overwrite = ($type(overwrite) ? overwrite : true);
 		// undo_name is only necessary if overwite == true or is a range
 		// (No way to set an undo name for insert snippet)
-		var undo_name = ($type(undo_name) === 'string' ? undo_name : 'Insert Snippet');
+		var undo_name = ($type(undo_name) == 'string' ? undo_name : 'Insert Snippet');
 		if (overwrite !== false) {
 			var recipe = new TextRecipe(undo_name);
-			if ($type(overwrite) !== 'boolean') {
+			if ($type(overwrite) != 'boolean') {
 				// User must have passed in a specific range to overwrite
 				var selection = Range.from(overwrite);
 			} else {

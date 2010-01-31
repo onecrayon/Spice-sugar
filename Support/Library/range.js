@@ -119,6 +119,11 @@ var Range = new Class({
 		return new Range(context.lineRangeForRange_(this.rangeValue()));
 	},
 	
+	// Text context shortcuts
+	select: function() {
+		context.setSelectedRanges([this.value()]);
+	},
+	
 	log: function() {
 		system.log('range(' + this.location + ',' + this.length + ')');
 	}
