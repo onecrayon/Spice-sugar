@@ -30,27 +30,23 @@ var bootstrap_Spice = function(script, args) {
 	
 	// Setup the simple subprocess execution
 	// Might want to setup something more complex down the road, but this is fine for now
-	var subprocess = function(argsOrString, envObject) {
+	var bash = function(command, envObject) {
+		var envObject = (typeof envObject == 'undefined' ? null : envObject);
 		var args = null;
 		var env = null;
 		
-		if (!$chk(argsOrString) || ($type(argsOrString) != 'array' && $type(argsOrString) != 'string')) {
-			log("Spice error: you must pass Process an array of arguments or a string with the path to the executable");
+		// Make sure they passed a command
+		if (typeof command == 'undefined' || command == '') {
+			log("Spice error: system.bash() requires a string with your Bash command");
 			return false;
-		} else if ($type(argsOrString) == 'string') {
-			if (argsOrString == '') {
-				log("Spice error: Process requires at least one argument (executable path)";
-				return false;
-			}
-			args = [argsOrString];
-		} else {
-			args = argsOrString;
 		}
+		// Create our bash command executable
+		// This is hacktastic, but I can't think of any other way to do it
+		args = ["/bin/bash", "-c", command];
 		
-		if ($chk(envObject) && $type(envObject) == 'object') {
+		// Set the env dictionary if it was passed
+		if (envObject instanceof Object) {
 			env = envObject;
-		} else if ($chk(envObject) && $type(envObject) != 'object') {
-			log("Spice error: Process can only accept objects as the envObject argument");
 		}
 		
 		return SpiceController.runProcess_withEnv_(args, env);
@@ -59,7 +55,7 @@ var bootstrap_Spice = function(script, args) {
 	var system = {
 		log: log,
 		print: log,
-		subprocess: subprocess,
+		bash: bash,
 		global: globalObject,
 		modules: {}
 	};

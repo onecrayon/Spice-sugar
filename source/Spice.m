@@ -232,7 +232,7 @@
 	[task setStandardOutput:outPipe];
 	[task setStandardError:outPipe];
 	[task setStandardInput:inPipe];
-	if (envs != nil) {
+	if (env != nil) {
 		[task setEnvironment:env];
 	}
 	
