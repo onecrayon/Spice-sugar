@@ -43,5 +43,6 @@
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
 - (BOOL)isFile:(NSString *)path;
 - (NSString *)read:(NSString *)path;
+- (NSString *)runProcess:(NSArray *)args withEnv:(NSDictionary *)env;
 
 @end

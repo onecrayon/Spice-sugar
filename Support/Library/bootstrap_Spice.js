@@ -28,9 +28,38 @@ var bootstrap_Spice = function(script, args) {
 		SpiceController.log(String(message));
 	};
 	
+	// Setup the simple subprocess execution
+	// Might want to setup something more complex down the road, but this is fine for now
+	var subprocess = function(argsOrString, envObject) {
+		var args = null;
+		var env = null;
+		
+		if (!$chk(argsOrString) || ($type(argsOrString) != 'array' && $type(argsOrString) != 'string')) {
+			log("Spice error: you must pass Process an array of arguments or a string with the path to the executable");
+			return false;
+		} else if ($type(argsOrString) == 'string') {
+			if (argsOrString == '') {
+				log("Spice error: Process requires at least one argument (executable path)";
+				return false;
+			}
+			args = [argsOrString];
+		} else {
+			args = argsOrString;
+		}
+		
+		if ($chk(envObject) && $type(envObject) == 'object') {
+			env = envObject;
+		} else if ($chk(envObject) && $type(envObject) != 'object') {
+			log("Spice error: Process can only accept objects as the envObject argument");
+		}
+		
+		return SpiceController.runProcess_withEnv_(args, env);
+	};
+	
 	var system = {
 		log: log,
 		print: log,
+		subprocess: subprocess,
 		global: globalObject,
 		modules: {}
 	};

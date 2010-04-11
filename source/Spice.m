@@ -215,6 +215,40 @@
 	return [NSString stringWithContentsOfFile:path];
 }
 
+- (NSString *)runProcess:(NSArray *)args withEnv:(NSDictionary *)env {
+	// Run the script
+	NSTask *task = [[NSTask alloc] init];
+	NSPipe *inPipe = [NSPipe pipe], *outPipe = [NSPipe pipe];
+	
+	// Set up the STDIN; temporarily disabled but we might want it later
+//	NSFileHandle *fh = [inPipe fileHandleForWriting];  
+//	[fh writeData:[inputStr dataUsingEncoding:NSUTF8StringEncoding]];  
+//	[fh closeFile];
+	
+	[task setLaunchPath:[args objectAtIndex:0]];
+	if ([args count] > 1) {
+		[task setArguments:[args subarrayWithRange:NSMakeRange(1, [args count] - 1)]];
+	}
+	[task setStandardOutput:outPipe];
+	[task setStandardError:outPipe];
+	[task setStandardInput:inPipe];
+	if (envs != nil) {
+		[task setEnvironment:env];
+	}
+	
+	[task launch];
+	
+	NSData *data;
+	NSString *outString = nil;
+	data = [[outPipe fileHandleForReading] readDataToEndOfFile];
+	outString = [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
+	
+	[task waitUntilExit];
+	[task release];
+	
+	return outString;
+}
+
 - (void)dealloc {
 	[self setScript:nil];
 	[self setSupportPaths:nil];
