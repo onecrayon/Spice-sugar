@@ -28,21 +28,29 @@ var bootstrap_Spice = function(script, args) {
 		SpiceController.log(String(message));
 	};
 	
-	// Setup the simple subprocess execution
+	// Setup simple subprocess execution via shell command
 	// Might want to setup something more complex down the road, but this is fine for now
-	var bash = function(command, envObject) {
+	var shell = function(command, shell, envObject) {
+		// Make sure they passed a command
+		if (typeof command == 'undefined' || command == '') {
+			log("Spice error: system.shell() requires at minimum a single argument (string with your shell command)");
+			return false;
+		}
+		// Setup the shell variable
+		var availShells = ['bash', 'csh', 'ksh', 'sh', 'tcsh', 'zsh'];
+		var shell = (typeof shell == 'undefined' ? availShells[0] : shell);
+		if (availShells.indexOf(shell) < 0) {
+			log("Spice error: system.shell() can only run one of the following shells: bash, csh, ksh, sh, tcsh, zsh");
+			return false;
+		}
+		// Make sure envObject exists as a variable
 		var envObject = (typeof envObject == 'undefined' ? null : envObject);
+		// Setup the variables we'll be using to pass things on to SpiceController
 		var args = null;
 		var env = null;
 		
-		// Make sure they passed a command
-		if (typeof command == 'undefined' || command == '') {
-			log("Spice error: system.bash() requires a string with your Bash command");
-			return false;
-		}
-		// Create our bash command executable
-		// This is hacktastic, but I can't think of any other way to do it
-		args = ["/bin/bash", "-c", command];
+		// Create our shell command executable
+		args = ["/bin/" + shell, "-c", command];
 		
 		// Set the env dictionary if it was passed
 		if (envObject instanceof Object) {
@@ -55,7 +63,7 @@ var bootstrap_Spice = function(script, args) {
 	var system = {
 		log: log,
 		print: log,
-		bash: bash,
+		shell: shell,
 		global: globalObject,
 		modules: {}
 	};
