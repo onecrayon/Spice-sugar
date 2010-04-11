@@ -37,6 +37,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 @interface JSCocoaController : NSObject {
 
 	JSGlobalContextRef	ctx;
+	BOOL				ownsContext;
     id					_delegate;
 
 	//
@@ -59,6 +60,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 
 	// JSLint : used for ObjJ syntax, class syntax, return if
 	BOOL				useJSLint;
+	
 }
 
 @property (assign) id delegate;
@@ -74,6 +76,7 @@ typedef struct	JSValueRefAndContextRef JSValueRefAndContextRef;
 - (JSGlobalContextRef)ctx;
 + (void)hazardReport;
 + (NSString*)runningArchitecture;
++ (void)updateCustomCallPaths;
 
 //
 // Evaluation
@@ -284,7 +287,10 @@ id	NSStringFromJSValue(JSValueRef value, JSContextRef ctx);
 //void* malloc_autorelease(size_t size);
 
 id	JSLocalizedString(id stringName, id firstArg, ...) NS_REQUIRES_NIL_TERMINATION;
+JSValueRef valueToExternalContext(JSContextRef ctx, JSValueRef value, JSContextRef externalCtx);
 
+// valueOf() is called by Javascript on objects, eg someObject + ' someString'
+JSValueRef	valueOfCallback(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
 
 //
 // From PyObjC : when to call objc_msgSend_stret, for structure return

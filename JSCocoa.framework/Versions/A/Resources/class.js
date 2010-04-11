@@ -47,7 +47,7 @@
 		,'pointer'		: '^'
 		,'charpointer'	: '*'
 		
-		,'BOOL'			: 'B'
+		,'BOOL'			: 'c'
 		,'NSInteger'	: 'i'
 	}
 	var reverseEncodings = {}
@@ -95,10 +95,18 @@
 					//
 					//	BUT if both expressions each use their own box, comparison will come negative
 					//
+					var starCount = match[2].toString().length
 					if (className in this && this[className]['class'] == this[className])	
 					{
 						// ** is a pointer to class
-						return match[2].toString().length > 1 ? '^' : '@'
+						return starCount > 1 ? '^@' : '@'
+					}
+					else
+					if (starCount == 1)
+					{
+						var rawEncoding = encoding.replace(/\*/, '')
+						rawEncoding = encodings[rawEncoding]
+						if (rawEncoding)	return '^' + rawEncoding
 					}
 				}
 				// Structure ?
@@ -597,17 +605,20 @@
 	//
 	function	outArgument()
 	{
-		var o = JSCocoaOutArgument.instance
+		// Derive to store some javascript data in the internal hash
+		if (!('outArgument2' in this))
+			JSCocoa.createClass_parentClass_('JSCocoaOutArgument2', 'JSCocoaOutArgument')
+
+		var o = JSCocoaOutArgument2.instance
 		o.isOutArgument = true
-//		if (arguments.length == 2)	o.mateWith({ memoryBuffer : arguments[0], atIndex : arguments[1] })
 		if (arguments.length == 2)	o.mateWithMemoryBuffer_atIndex_(arguments[0], arguments[1])
+
 		return	o
 	}
+
 	
 	function	memoryBuffer(types)
 	{
-//		return	JSCocoaMemoryBuffer.instance
-//		return	JSCocoaMemoryBuffer.instance({ withTypes : types })
 		var o = JSCocoaMemoryBuffer.instanceWithTypes(types)
 		o.isOutArgument = true
 		return	o
@@ -686,10 +697,6 @@
 
 			// Replace js functions
 			script = script.replace(/^\s*js\s+function\s+(\w+)(.*)$/gm, expandJSMacros_ReplaceJSFunctions)
-			
-//			log('****************')
-//			log('\n' + script)
-//			log('****************')
 		}
 		return	script
 	}
@@ -792,14 +799,13 @@
 			token = tokens[i]
 			var v = tv = token.rawValue
 			
-			var line = lines[token.line]
-			if (!line) continue
-			
 			if (token.id == '(endline)')
 			{
 				tokenStream.push('\n')
 				continue
 			}
+			var line = lines[token.line]
+			if (!line) continue
 			
 			// Add whitespace - either the start of the line if we switched lines, or the span between this token and the previous one
 			var whitespace = prevtoken.line != token.line ? line.substr(0, token.from) : line.substr(prevtoken.character, token.from-prevtoken.character)
@@ -820,6 +826,11 @@
 				else
 					if (tokens[i+1].value != '(')	tokens[i].rawValue += '()'
 			}
+			else if (token.value == '__FILE__' || token.value == '__LINE__')
+			{
+				var v = token.value == '__FILE__' ? 'sourceURL' : 'line'
+				token.rawValue = 'function(){try{throw{}}catch(e){return e.' + v + '}}()'
+			}
 
 			// Handle ObjC classes
 			if (token.isObjCClassStart)
@@ -834,7 +845,7 @@
 					tokenStream.push("Class('" + tokens[i+1].value + "').definition = function ()")
 					i += 1
 				}
-				if (token.value == 'implementation')	tokenStream.push('{\n')
+				if (token.value == '@implementation')	tokenStream.push('{\n')
 				continue
 			}
 			// Class var list @implementation Class : ParentClass { var list }
@@ -931,30 +942,102 @@
 				}
 			}
 			else
-			// String immediates, selectors
+			// String immediates
 			if (token.id == '@')
 			{
-				if (tokens[i+1].value == 'implementation')	continue
-				if (tokens[i+1].value == 'end')	
+				var nexttoken = tokens[i+1]
+				// This can start a message : [@'hello' writeTo...]
+				tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
+				// Delete string token
+				nexttoken.rawValue = ''
+				continue
+			}
+			else
+			// Selectors
+			if (token.id == '@selector')
+			{
+				tokenStream.push("'" + tokens[i+2].rawValue + "'")
+				i += 3
+				continue						
+			}
+			else
+			// Class definition ending
+			if (token.value == '@end')
+			{
+				i++
+				tokenStream.push('}\n')
+				continue
+			}
+			else
+			// setValueForKey shortcut
+			if (token.id == '@=')
+			{
+				function	backtrack(stream, tokenIndex, search)
 				{
-					i++
-					tokenStream.push('}\n')
-					continue
+					var i = tokenIndex
+					var match
+					var matchIndex
+					var counterpart
+					var leftCount	= 0
+					var rightCount	= 0
+					for (; i>0; i--)
+					{
+						// Look for token
+						if (!match && search[stream[i]])
+						{
+							match = stream[i]
+							if (typeof search[stream[i]] == 'string')	counterpart = search[stream[i]]
+							matchIndex = i
+							if (!counterpart)	return { left : i, right : tokenIndex }
+						}
+						if (stream[i] == match)			rightCount++
+						if (stream[i] == counterpart)	leftCount++
+						if (leftCount > 0 && leftCount == rightCount)	return { left : i, right : matchIndex }
+					}
+					return { left : -1, right : -1 }
 				}
 				
-				var nexttoken = tokens[i+1]
-				if (nexttoken.id == '(string)')
+				function	trackRightFromOperator(stream, tokenIndex, operator)
 				{
-					tokenStream.push('NSString.stringWithString(' + nexttoken.rawValue + ')')
-					i += 1
-					continue
+					var right = operator.right
+					var lastToken
+					while (right)
+					{
+						lastToken = right
+						right = right.rightParen || right.right
+					}
+					if (!lastToken)	return -1
+					var l = stream.length-1
+					for (; tokenIndex<l; tokenIndex++)
+						if (stream[tokenIndex] == lastToken)	return tokenIndex
+					return -1
 				}
-				else
+				
+				var idx1 = backtrack(tokenStream, tokenStream.length-1, { '.' : true, ']' : '[' })
+				var idx2 = trackRightFromOperator(tokens, i, token)
+				var left = tokenStream[idx1.left]
+				var right= tokens[idx2]
+
+				// Reconstruct key name
+				var key = ''
+				for (var j=idx1.left+1; j<idx1.right; j++)
 				{
-					tokenStream.push("'" + tokens[i+3].rawValue + "'")
-					i += 4
-					continue						
+					if (left == '[')	key += tokenStream[j]
+					else
+						if (!tokenStream[j].match(/(\/\*)|^\s*$/))	
+							key += "'" + tokenStream[j] + "'"
 				}
+
+				// Delete key from output stream
+				for (var j=idx1.left; j<=idx1.right; j++)
+					tokenStream[j] = ''
+				
+				// Patch key in input stream
+				tokens.splice(idx2+1, 0, { rawValue : ' ,' + key + ')', line : right.line })
+
+				// Convert @= to setValue:forKey:
+				tokenStream.push('.setValue_forKey_(')
+				continue
 			}
 			else
 			// If return
@@ -1042,9 +1125,7 @@
 			tokenStream.push(v)
 		}
 		var transformed = tokenStream.join('')
-//		log('*************')
-//		log(transformed)
-//		log('****' + script + '->' + transformed)
+//		log('Transformed' + script + '->' + transformed)
 		return	transformed
 	}
 
@@ -1078,19 +1159,3 @@
 		for (var i in this) r.push(i)
 		return r
 	}
-	
-	
-	//
-	// Memory read / write
-	//	only objects for now, may add type later
-	//
-	function	memwrite(address, object, type /* not used */)
-	{
-		__jsc__.writeObject_toAddress(object, address)
-	}
-
-	function	memread(address, type /* not used */)
-	{
-		return __jsc__.readObjectFromAddress(address)
-	}
-	
