@@ -18,7 +18,7 @@
 	NSArray *arguments;
 	// This is the function we'll try to call from the Javascript
 	NSString *target;
-	// Standard undo_name option
+	// Standard undo-name option
 	NSString *undoName;
 	// Syntax context the action can be performed in
 	NSString *syntaxContext;

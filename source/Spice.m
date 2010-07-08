@@ -44,9 +44,20 @@
 	
 	// Grab the basic instance variables
 	[self setScript:[dictionary objectForKey:@"script"]];
-	[self setUndoName:[dictionary objectForKey:@"undo_name"]];
-	[self setArguments:[dictionary objectForKey:@"arguments"]];
-	
+	// Backwards compatibility for undo_name vs. undo-name
+	if ([dictionary objectForKey:@"undo-name"]) {
+		[self setUndoName:[dictionary objectForKey:@"undo-name"]];
+	} else {
+		[self setUndoName:[dictionary objectForKey:@"undo_name"]];
+	}
+	// If arguments isn't an array, save it as an array with a single item
+	if (![[dictionary objectForKey:@"arguments"] isKindOfClass:[NSArray class]]) {
+		[self setArguments:[NSArray arrayWithObject:[dictionary objectForKey:@"arguments"]]];
+	} else {
+		// It's an array, so just toss it in there
+		[self setArguments:[dictionary objectForKey:@"arguments"]];
+	}
+	// Make sure that our arguments array isn't nil
 	if ([self arguments] == nil) {
 		[self setArguments:[NSArray arrayWithObjects:nil]];
 	}
@@ -71,7 +82,7 @@
 	];
 	// This path might need to be searched if we aren't in the Spice bundle
 	NSString *jclPath = [[NSBundle bundleWithIdentifier:@"com.onecrayon.spice"] bundlePath];
-	if ([[self bundlePath] compare:jclPath] != NSOrderedSame) {
+	if ([[self bundlePath] isEqualToString:jclPath]) {
 		[self setSupportPaths:[default_paths arrayByAddingObject:[jclPath stringByAppendingPathComponent:@"Support"]]];
 	} else {
 		[self setSupportPaths:[NSArray arrayWithArray:default_paths]];
@@ -212,7 +223,7 @@
 }
 
 - (NSString *)read:(NSString *)path {
-	return [NSString stringWithContentsOfFile:path];
+	return [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:nil];
 }
 
 - (NSString *)runProcess:(NSArray *)args withEnv:(NSDictionary *)env {
