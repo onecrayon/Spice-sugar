@@ -11,13 +11,9 @@ license: MIT license.
 
 authors:
 - Ian Beck
-- Thomas Aylott
 
 ...
 */
-
-// Setup the globalObject
-var globalObject = this;
 
 // Handles setting up the modular environment
 // Can't be an anonymous function because Spice has to be able to get a return value
@@ -64,7 +60,6 @@ var bootstrap_Spice = function(script, args) {
 		log: log,
 		print: log,
 		shell: shell,
-		global: globalObject,
 		modules: {}
 	};
 	

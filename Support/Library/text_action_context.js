@@ -121,5 +121,5 @@ var TextActionContext = new Class({
 	}
 });
 
-exports.textContext = new TextActionContext();;
+exports.textContext = new TextActionContext();
 exports.TextActionContext = TextActionContext;
