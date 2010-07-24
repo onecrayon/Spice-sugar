@@ -39,9 +39,12 @@
 @property (retain) NSArray* supportPaths;
 
 - (void)log:(NSString *)message;
-- (NSString *)findScript:(NSString *)fileName inFolders:(NSArray *)folders;
+- (NSString *)findModule:(NSString *)moduleName inFolders:(NSArray *)folders;
+- (NSString *)readModule:(NSString *)modulePath;
+- (NSString *)readModule:(NSString *)modulePath appendExports:(BOOL)appendExports;
 - (void)throwAlert:(NSString *)title withMessage:(NSString *)message inContext:(id)context;
 - (BOOL)isFile:(NSString *)path;
+- (BOOL)isDirectory:(NSString *)path;
 - (NSString *)read:(NSString *)path;
 - (NSString *)runProcess:(NSArray *)args withEnv:(NSDictionary *)env;
 

@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7AC128C011FA1BBB00421479 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC128B711FA1BBB00421479 /* NSObject+SBJSON.m */; };
+		7AC128C111FA1BBC00421479 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC128B911FA1BBB00421479 /* NSString+SBJSON.m */; };
+		7AC128C211FA1BBC00421479 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC128BB11FA1BBB00421479 /* SBJsonBase.m */; };
+		7AC128C311FA1BBC00421479 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC128BD11FA1BBB00421479 /* SBJsonParser.m */; };
+		7AC128C411FA1BBC00421479 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AC128BF11FA1BBB00421479 /* SBJsonWriter.m */; };
 		7AD8AF60105D5589006D68AB /* Spice.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AD8AF5F105D5589006D68AB /* Spice.m */; };
 		7AFA3C6C100E32BE00835DBA /* JSCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */; };
 		7AFA3C73100E32F500835DBA /* JSCocoa.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */; };
@@ -34,10 +39,19 @@
 		089C167FFE841241C02AAC07 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		32DBCF630370AF2F00C91783 /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Prefix.pch; sourceTree = "<group>"; };
+		7AC128B511FA1BBB00421479 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		7AC128B611FA1BBB00421479 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		7AC128B711FA1BBB00421479 /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		7AC128B811FA1BBB00421479 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		7AC128B911FA1BBB00421479 /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		7AC128BA11FA1BBB00421479 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		7AC128BB11FA1BBB00421479 /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		7AC128BC11FA1BBB00421479 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		7AC128BD11FA1BBB00421479 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		7AC128BE11FA1BBB00421479 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		7AC128BF11FA1BBB00421479 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		7AD8AF5E105D5589006D68AB /* Spice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Spice.h; path = source/Spice.h; sourceTree = "<group>"; };
 		7AD8AF5F105D5589006D68AB /* Spice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Spice.m; path = source/Spice.m; sourceTree = "<group>"; };
-		7ADF548A1011679500804298 /* mootools-server.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "mootools-server.js"; sourceTree = "<group>"; };
-		7AF62CF71018ACA500990C5B /* bootstrap_JSCocoaLoader.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = bootstrap_JSCocoaLoader.js; sourceTree = "<group>"; };
 		7AFA3C6B100E32BE00835DBA /* JSCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSCocoa.framework; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Spice.sugar */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Spice.sugar; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -60,7 +74,6 @@
 		089C166AFE841209C02AAC07 /* JSCocoaLoader.sugar */ = {
 			isa = PBXGroup;
 			children = (
-				7ADF548D101167A100804298 /* Support */,
 				08FB77AFFE84173DC02AAC07 /* Classes */,
 				32C88E010371C26100C91783 /* Other Sources */,
 				089C167CFE841241C02AAC07 /* Resources */,
@@ -92,6 +105,7 @@
 		08FB77AFFE84173DC02AAC07 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7AC128B411FA1BBB00421479 /* JSON */,
 				7AD8AF5E105D5589006D68AB /* Spice.h */,
 				7AD8AF5F105D5589006D68AB /* Spice.m */,
 			);
@@ -132,22 +146,23 @@
 			name = "Other Sources";
 			sourceTree = "<group>";
 		};
-		7ADF54891011679500804298 /* Library */ = {
+		7AC128B411FA1BBB00421479 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				7AF62CF71018ACA500990C5B /* bootstrap_JSCocoaLoader.js */,
-				7ADF548A1011679500804298 /* mootools-server.js */,
+				7AC128B511FA1BBB00421479 /* JSON.h */,
+				7AC128B611FA1BBB00421479 /* NSObject+SBJSON.h */,
+				7AC128B711FA1BBB00421479 /* NSObject+SBJSON.m */,
+				7AC128B811FA1BBB00421479 /* NSString+SBJSON.h */,
+				7AC128B911FA1BBB00421479 /* NSString+SBJSON.m */,
+				7AC128BA11FA1BBB00421479 /* SBJsonBase.h */,
+				7AC128BB11FA1BBB00421479 /* SBJsonBase.m */,
+				7AC128BC11FA1BBB00421479 /* SBJsonParser.h */,
+				7AC128BD11FA1BBB00421479 /* SBJsonParser.m */,
+				7AC128BE11FA1BBB00421479 /* SBJsonWriter.h */,
+				7AC128BF11FA1BBB00421479 /* SBJsonWriter.m */,
 			);
-			name = Library;
-			path = Support/Library;
-			sourceTree = "<group>";
-		};
-		7ADF548D101167A100804298 /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				7ADF54891011679500804298 /* Library */,
-			);
-			name = Support;
+			name = JSON;
+			path = source/JSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -225,6 +240,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AD8AF60105D5589006D68AB /* Spice.m in Sources */,
+				7AC128C011FA1BBB00421479 /* NSObject+SBJSON.m in Sources */,
+				7AC128C111FA1BBC00421479 /* NSString+SBJSON.m in Sources */,
+				7AC128C211FA1BBC00421479 /* SBJsonBase.m in Sources */,
+				7AC128C311FA1BBC00421479 /* SBJsonParser.m in Sources */,
+				7AC128C411FA1BBC00421479 /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

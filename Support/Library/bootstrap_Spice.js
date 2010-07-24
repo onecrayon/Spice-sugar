@@ -82,15 +82,15 @@ var bootstrap_Spice = function(script, args) {
 	};
 	
 	// This function powers Javascript inclusions
-	// `file` is the only required variable
-	var require = function(file, filePaths, loadGlobally, forceReload) {
-		// filePaths is an optional array or string of paths to search within the support folders
-		var filePaths = (typeof filePaths != 'undefined' ? filePaths : null);
-		// If a single file path was passed, convert it to a single element array
-		if (typeof filePaths == 'string') {
-			filePaths = [filePaths];
-		} else if (filePaths === null) {
-			filePaths = ['Library'];
+	// `moduleName` is the only required variable (string; the module name)
+	var require = function(moduleName, searchPaths, loadGlobally, forceReload) {
+		// searchPaths is an optional array or string of paths to search within the support folders
+		var searchPaths = (typeof searchPaths != 'undefined' ? searchPaths : null);
+		// If a single search path was passed, convert it to a single element array
+		if (typeof searchPaths == 'string') {
+			searchPaths = [searchPaths];
+		} else if (searchPaths === null) {
+			searchPaths = ['Library'];
 		}
 		// loadGlobally allows bypassing the exports system and just loading a script into the global workspace; necessary for things like Mootools
 		// A script that has been loaded globally will never be reloaded; once loaded, everyone can access it
@@ -98,19 +98,19 @@ var bootstrap_Spice = function(script, args) {
 		// forceReload allows us to strong-arm the require system into loading a module even if it has already been loaded
 		var forceReload = (typeof forceReload != 'undefined' ? forceReload : false);
 		// Find the script using the Objective-C interface
-		var scriptPath = SpiceController.findScript_inFolders_(file, filePaths);
-		if (scriptPath == null) throw new Error("Cannot find the module '"+file+"'");
+		var modulePath = SpiceController.findModule_inFolders_(moduleName, searchPaths);
+		if (modulePath == null) throw new Error("Cannot find the module '"+moduleName+"'");
 		
 		// Eval the script if it hasn't already been loaded
-		if (Object.prototype.hasOwnProperty.call(system.modules, file) && !forceReload) {
+		if (Object.prototype.hasOwnProperty.call(system.modules, moduleName) && !forceReload) {
 			// The script is already in system.modules, so already been loaded
 			// If we're loading globally and/or it has been loaded globally in the past, return
-			if (system.modules[file].global || (loadGlobally && system.modules[file].global)) {
+			if (system.modules[moduleName].global || (loadGlobally && system.modules[moduleName].global)) {
 				return true;
 			} else if (loadGlobally) {
 				// Here's a pretty todo; we're loading globally, but it has not been loaded globally in the past
 				// Going through with the load could have unexpected results so for now throw an error
-				throw new Error("Error: '"+file+"' has already been loaded as a local module, and should not be reloaded in the global scope");
+				throw new Error("Error: '"+moduleName+"' has already been loaded as a local module, and should not be reloaded in the global scope");
 				return false;
 			}
 		} else {
@@ -118,36 +118,42 @@ var bootstrap_Spice = function(script, args) {
 			
 			// If a global script, run it through JSCocoa and update system.modules
 			if (loadGlobally) {
-				__jsc__.evalJSFile(scriptPath);
-				system.modules[file] = function() {};
-				system.modules[file].global = true;
-				system.modules[file].uri = scriptPath;
+				if (SpiceController.isFile(modulePath)) {
+					__jsc__.evalJSFile(modulePath);
+				} else if (SpiceController.isDirectory(modulePath)) {
+					__jsc__.evalJSString(SpiceController.readModule_withoutExports(modulePath, true));
+				}
+				system.modules[moduleName] = function() {};
+				system.modules[moduleName].global = true;
+				system.modules[moduleName].uri = modulePath;
 				// No need to worry about exports, etc., so exit immediately
 				return true;
 			} else {
+				// TODO: Figure out how to parse in modules that are folders (only handles files right now)
+				
 				// Verify that the module isn't pending execution earlier in the require tree
-				if (tree.indexOf(file) >= 0) {
+				if (tree.indexOf(moduleName) >= 0) {
 					// The module has already been required (so we've got a loop on our hands)
 					// For now, bail with an error message and an empty object
-					system.log('Spice Error: require() loop for `' + file + '`; aborting');
+					system.log('Spice Error: require() loop for `' + moduleName + '`; aborting');
 					return {};
 				} else {
 					// Not in the tree, so add it
-					tree.push(file);
+					tree.push(moduleName);
 				}
 				
 				// Parse the script as a self-contained function and store in system.modules
-				system.modules[file] = eval("(function(require,exports,module,system){" + SpiceController.read(scriptPath) + "/**/\n})");
-				system.modules[file].global = false;
-				system.modules[file].uri = scriptPath;
-				system.modules[file].exports = {};
+				system.modules[moduleName] = eval("(function(require,exports,module,system){" + SpiceController.readModule(modulePath) + "/**/\n})");
+				system.modules[moduleName].global = false;
+				system.modules[moduleName].uri = modulePath;
+				system.modules[moduleName].exports = {};
 				
 				// Evaluate the module
 				var module = {
-					id: file,
-					uri: scriptPath
+					id: moduleName,
+					uri: modulePath
 				};
-				system.modules[file](require, system.modules[file].exports, module, system);
+				system.modules[moduleName](require, system.modules[moduleName].exports, module, system);
 				
 				// Now that we've executed the module, pop it from the tree
 				tree.pop();
@@ -155,20 +161,20 @@ var bootstrap_Spice = function(script, args) {
 		}
 		
 		// Return the exports object
-		return system.modules[file].exports;
+		return system.modules[moduleName].exports;
 	}
 	
-	require.global = function(file, filePaths) {
-		var filePaths = (typeof filePaths != 'undefined' ? filePaths : null);
+	require.global = function(moduleName, searchPaths) {
+		var searchPaths = (typeof searchPaths != 'undefined' ? searchPaths : null);
 		// Shortcut to do a global load; returns true (loaded/already loaded) or false
-		return require(file, filePaths, true, false);
+		return require(moduleName, searchPaths, true, false);
 	}
 	
-	require.force = function(file, filePaths, loadGlobally) {
-		var filePaths = (typeof filePaths != 'undefined' ? filePaths : null);
+	require.force = function(moduleName, searchPaths, loadGlobally) {
+		var searchPaths = (typeof searchPaths != 'undefined' ? searchPaths : null);
 		var loadGlobally = (typeof loadGlobally != 'undefined' ? loadGlobally : false);
 		// Shortcut to force a reload
-		return require(file, filePaths, loadGlobally, true);
+		return require(moduleName, searchPaths, loadGlobally, true);
 	}
 	
 	// Now that we've got the basic logic setup, it's time to actually run the script
@@ -180,6 +186,7 @@ var bootstrap_Spice = function(script, args) {
 		if (Object.prototype.hasOwnProperty.call(mod, 'main')) {
 			target = 'main';
 		} else if (Object.prototype.hasOwnProperty.call(mod, 'act')) {
+			// DEPRECATED: left over from the old days of TEA
 			target = 'act';
 		}
 	} else if (!Object.prototype.hasOwnProperty.call(mod, target)) {
@@ -188,6 +195,7 @@ var bootstrap_Spice = function(script, args) {
 	// Call function if it exists
 	if (target !== null) {
 		// Convert the arguments array into a Javascript array (from NSArray)
+		// TODO: Is this necessary? Not sure if JSCocoa automatically converts to an array or not
 		var js_args = [];
 		for (var i = 0; i < args.count; i++) {
 			js_args.push(args.objectAtIndex(i));
