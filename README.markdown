@@ -1,6 +1,9 @@
 Spice.sugar for Espresso
 ========================
 
+**This version of Spice is officially deprecated, and will
+no longer work properly with [Espresso 2.0](http://macrabbit.com/espresso/2/).**
+
 Spice allows [Espresso][esp] to be extended using [JSCocoa][jsc]. For more
 information about the plugin (including documentation) see the Spice site:
 
